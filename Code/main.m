@@ -1,12 +1,12 @@
 function main
-% Updated on Sep 11, 2018
+% Updated on Sep 12, 2018
 % I will update the help once the code is complete
 
 close all;
 clear;
 clc;
 
-electrode = 80;
+electrode = 30;
 
 path = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
 files = extractFiles(path);
@@ -70,35 +70,41 @@ data = [];
 label = [];
 % [cellHNST{2}(1,:); cellHNST{2}(1,:)]
 for iter = 1 : size(cellHNST,2)
-    if isempty(data)
-        data = cellHNST{iter}(electrode,:);
-    else
-        data = [data; cellHNST{iter}(electrode,:)];
-    end
-    % cellHNST{iter}(electrode,:);
+    data = [data; cellHNST{iter}(electrode,:) - mean(cellHNST{iter}(electrode,:))];
 end
 label = [label; repmat(0, size(cellHNST,2), 1)];
 
 
 for iter = 1 : size(cellHTST,2)
-    data = [data; cellHTST{iter}(electrode,:)];
+    data = [data; cellHTST{iter}(electrode,:) - mean(cellHTST{iter}(electrode,:))];
 end
 label = [label; repmat(1, size(cellHTST,2), 1)];
 
 
 for iter = 1 : size(cellEYST,2)
-    data = [data; cellEYST{iter}(electrode,:)];
+    data = [data; cellEYST{iter}(electrode,:) - mean(cellEYST{iter}(electrode,:))];
 end
 label = [label; repmat(2, size(cellEYST,2), 1)];
 
 
 for iter = 1 : size(cellMOST,2)
-    data = [data; cellMOST{iter}(electrode,:)];
+    data = [data; cellMOST{iter}(electrode,:) - mean(cellMOST{iter}(electrode,:))];
 end
 label = [label; repmat(3, size(cellMOST,2), 1)];
 
 
-multisvm(data, label, data);
+% multisvm(data, label, data);
+perm = randperm(size(data,1));
+data = data(perm, :);
+label = label(perm);
+
+
+count = 0;
+for iter = 101 : 350
+    if label(iter) == dtwWrapper(data(1:100, :), label(1:100), data(iter,:))
+        count = count + 1;
+    end
+end
 
 disp('f');
 end
