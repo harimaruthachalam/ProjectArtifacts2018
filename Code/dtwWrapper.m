@@ -1,4 +1,4 @@
-function retLabel = dtwWrapper(refData, refLabel, data)
+function retLabel = dtwWrapper(refData, refLabel, testData)
 % Updated on Sep 12, 2018
 % I will update the help once the code is complete
 
@@ -8,12 +8,14 @@ function retLabel = dtwWrapper(refData, refLabel, data)
 
 dtwDist = [];
 for iter = 1 : length(refLabel)
-    dtwDist = [dtwDist; dtw(refData(iter, :), data, 2)];
+    dtwDist = [dtwDist; dtw(refData{iter}, testData, 2)];
 end
 
 [dtwDistSorted, index] = sort(dtwDist);
 
-retLabel = mode(refLabel(index(1:10)));
+% retLabel = mode(refLabel(index(1:2),:));
+
+retLabel = refLabel(index(1),:);
 
 % disp('ff')
 % 

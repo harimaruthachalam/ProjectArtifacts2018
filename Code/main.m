@@ -66,45 +66,94 @@ for iteratorFile = 1 : size(files,1)
     end
 end
 
-data = [];
+perm = randperm(size(cellEYST, 2));
+cellEYST = cellEYST(perm);
+perm = randperm(size(cellHNST, 2));
+cellHNST = cellHNST(perm);
+perm = randperm(size(cellHTST, 2));
+cellHTST = cellHTST(perm);
+perm = randperm(size(cellMOST, 2));
+cellMOST = cellMOST(perm);
+
+
+testCellHNST = cellHNST(1 : ceil(size(cellHNST,2)/2));
+testCellEYST = cellEYST(1 : ceil(size(cellEYST,2)/2));
+testCellHTST = cellHTST(1 : ceil(size(cellHTST,2)/2));
+testCellMOST = cellMOST(1 : ceil(size(cellMOST,2)/2));
+
+cellEYST = cellEYST(ceil(size(cellEYST,2)/2) + 1 : end);
+cellHNST = cellHNST(ceil(size(cellHNST,2)/2) + 1 : end);
+cellHTST = cellHTST(ceil(size(cellHTST,2)/2) + 1 : end);
+cellMOST = cellMOST(ceil(size(cellMOST,2)/2) + 1 : end);
+
+data = {};
 label = [];
 % [cellHNST{2}(1,:); cellHNST{2}(1,:)]
 for iter = 1 : size(cellHNST,2)
-    data = [data; cellHNST{iter}(electrode,:) - mean(cellHNST{iter}(electrode,:))];
+    data = [data; cellHNST{iter}(:,:) - mean(cellHNST{iter}(:,:),2)];
 end
-label = [label; repmat(0, size(cellHNST,2), 1)];
+label = [label; repmat('HNST', size(cellHNST,2), 1)];
 
 
 for iter = 1 : size(cellHTST,2)
-    data = [data; cellHTST{iter}(electrode,:) - mean(cellHTST{iter}(electrode,:))];
+    data = [data; cellHTST{iter}(:,:) - mean(cellHTST{iter}(:,:),2)];
 end
-label = [label; repmat(1, size(cellHTST,2), 1)];
+label = [label; repmat('HTST', size(cellHTST,2), 1)];
 
 
 for iter = 1 : size(cellEYST,2)
-    data = [data; cellEYST{iter}(electrode,:) - mean(cellEYST{iter}(electrode,:))];
+    data = [data; cellEYST{iter}(:,:) - mean(cellEYST{iter}(:,:),2)];
 end
-label = [label; repmat(2, size(cellEYST,2), 1)];
+label = [label; repmat('EYST', size(cellEYST,2), 1)];
 
 
 for iter = 1 : size(cellMOST,2)
-    data = [data; cellMOST{iter}(electrode,:) - mean(cellMOST{iter}(electrode,:))];
+    data = [data; cellMOST{iter}(:,:) - mean(cellMOST{iter}(:,:),2)];
 end
-label = [label; repmat(3, size(cellMOST,2), 1)];
+label = [label; repmat('MOST', size(cellMOST,2), 1)];
 
 
-% multisvm(data, label, data);
-perm = randperm(size(data,1));
-data = data(perm, :);
-label = label(perm);
 
 
+% multisvm(data, label, data);refData
+% perm = randperm(size(data,1));
+% data = data(perm, :);
+% label = label(perm);
+
+disp('HNST');
 count = 0;
-for iter = 101 : 350
-    if label(iter) == dtwWrapper(data(1:100, :), label(1:100), data(iter,:))
+for iter = 1 : length(testCellHNST)
+    if strcmp(dtwWrapper(data, label, testCellHNST{iter}),'HNST')
         count = count + 1;
     end
 end
+countHNST = count;
+disp('EYST');
+count = 0;
+for iter = 1 : length(testCellEYST)
+    if strcmp(dtwWrapper(data, label, testCellEYST{iter}),'EYST')
+        count = count + 1;
+    end
+end
+countEYST = count;
+disp('HTST');
+count = 0;
+for iter = 1 : length(testCellHTST)
+    if strcmp(dtwWrapper(data, label, testCellHTST{iter}),'HTST')
+        count = count + 1;
+    end
+end
+countHTST = count;
+disp('MOST');
+count = 0;
+for iter = 1 : length(testCellMOST)
+    if strcmp(dtwWrapper(data, label, testCellMOST{iter}),'MOST')
+        count = count + 1;
+    end
+end
+countMOST = count;
+
+
 
 disp('f');
 end
