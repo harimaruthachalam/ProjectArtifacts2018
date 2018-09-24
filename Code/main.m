@@ -6,7 +6,7 @@ close all;
 clear;
 clc;
 
-electrode = 30;
+% electrode = 30;
 
 path = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
 files = extractFiles(path);
@@ -24,9 +24,22 @@ for iteratorFile = 1 : size(files,1)
     
     [ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
     EEG = pop_readegi(strcat(currentPath,currentFilename), [],[],'auto');
-    [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Init'),'gui','off');
+    [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Init'),'gui','on');
+    
+    
+    fid = fopen(strcat(currentPath,files(iteratorFile,:), '_band_0_60_notch50_fil_IMP.txt'),'rt');
+    
+    inconfig = textscan(fid, '%s %*[:] %s', 'CommentStyle', '%','HeaderLines',5);
+    fclose(fid);
+    
+    
+    % EEG = pop_interp(EEG, find(str2double(inconfig{1,2}(1:128)) > 49)', 'spherical');
+    % [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
     
     EEG = eeg_checkset( EEG );
+%     EEG.data = movmean(EEG.data,100);
+%     EEG.data = diff(EEG.data,1,2);
+    
     EEG = pop_epoch( EEG, { 'EYST' }, [0 3], 'newname', strcat(rawFilename, ' Eye Open and Close'), 'epochinfo', 'yes');
     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'gui','off');
     EEG = eeg_checkset( EEG );
@@ -122,32 +135,40 @@ label = [label; repmat('MOST', size(cellMOST,2), 1)];
 
 disp('HNST');
 count = 0;
+resHNST = {};
 for iter = 1 : length(testCellHNST)
-    if strcmp(dtwWrapper(data, label, testCellHNST{iter}),'HNST')
+    resHNST = [resHNST; dtwWrapper(data, label, testCellHNST{iter},10)];
+    if strcmp(resHNST{end}(1,:),'HNST')
         count = count + 1;
     end
 end
 countHNST = count;
 disp('EYST');
 count = 0;
+resEYST = {};
 for iter = 1 : length(testCellEYST)
-    if strcmp(dtwWrapper(data, label, testCellEYST{iter}),'EYST')
+    resEYST = [resEYST; dtwWrapper(data, label, testCellEYST{iter}, 10)];
+    if strcmp(resEYST{end}(1,:),'EYST')
         count = count + 1;
     end
 end
 countEYST = count;
 disp('HTST');
 count = 0;
+resHTST = {};
 for iter = 1 : length(testCellHTST)
-    if strcmp(dtwWrapper(data, label, testCellHTST{iter}),'HTST')
+    resHTST = [resHTST; dtwWrapper(data, label, testCellHTST{iter}, 10)];
+    if strcmp(resHTST{end}(1,:),'HTST')
         count = count + 1;
     end
 end
 countHTST = count;
 disp('MOST');
 count = 0;
+resMOST = {};
 for iter = 1 : length(testCellMOST)
-    if strcmp(dtwWrapper(data, label, testCellMOST{iter}),'MOST')
+    resMOST = [resMOST; dtwWrapper(data, label, testCellMOST{iter}, 10)];
+    if strcmp(resMOST{end}(1,:),'MOST')
         count = count + 1;
     end
 end
