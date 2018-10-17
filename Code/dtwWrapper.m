@@ -28,10 +28,10 @@ else
 end
 imagesc(R);
 
-mkdir(strcat(fullfile(savePath,DTWType), refLabel(index(1),:)));
+mkdir(strcat(fullfile(savePath, DTWType), '/', refLabel(index(1),:)));
 
-savefig(strcat(fullfile(savePath,DTWType, refLabel(index(1),:)), '/', datestr(clock,'mm_dd_HH_MM_SS_FFF'),'.fig'));
-saveas(gcf,strcat(fullfile(savePath,DTWType, refLabel(index(1),:)), '/', datestr(clock,'mm_dd_HH_MM_SS_FFF'),'.png'));
+savefig(strcat(fullfile(savePath, DTWType, refLabel(index(1),:)), '/', datestr(clock,'mm_dd_HH_MM_SS_FFF'),'.fig'));
+saveas(gcf,strcat(fullfile(savePath, DTWType, refLabel(index(1),:)), '/', datestr(clock,'mm_dd_HH_MM_SS_FFF'),'.png'));
 close;
 
 retLabel = refLabel(index(1 : topC),:);
