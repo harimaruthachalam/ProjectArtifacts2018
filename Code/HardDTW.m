@@ -1,5 +1,5 @@
 function [R] = HardDTW(X, Y, w)
-% Updated on Oct 12, 2018
+% Updated on Oct 17, 2018
 % I will update the help once the code is complete
 
 if nargin < 3
@@ -31,6 +31,6 @@ for i=1:m
     end
 end
 
-R = R(end:end);
+% R = R(end:end);
 
 end

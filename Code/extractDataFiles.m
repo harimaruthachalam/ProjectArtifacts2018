@@ -1,5 +1,5 @@
 function [trainData, trainLabel, testData, testLabel] = extractDataFiles(trainPath, testPath, isSame)
-% Updated on Oct 12, 2018
+% Updated on Oct 17, 2018
 % I will update the help once the code is complete
 
 
@@ -33,9 +33,9 @@ if isSame == 1
         % [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
         
         EEG = eeg_checkset( EEG );
-        for i = 1 : 128
-            EEG.data(i,:) = doFilter(EEG.data(i,:));
-        end
+        %         for i = 1 : 128
+        %             EEG.data(i,:) = doFilter(EEG.data(i,:));
+        %         end
         %     EEG.data = movmean(EEG.data,100);
         %     EEG.data = diff(EEG.data,1,2);
         
@@ -181,8 +181,8 @@ else
         fclose(fid);
         
         
-        % EEG = pop_interp(EEG, find(str2double(inconfig{1,2}(1:128)) > 49)', 'spherical');
-        % [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
+        EEG = pop_interp(EEG, find(str2double(inconfig{1,2}(1:128)) > 49)', 'spherical');
+        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
         
         EEG = eeg_checkset( EEG );
         %     EEG.data = movmean(EEG.data,100);

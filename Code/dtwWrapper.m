@@ -1,27 +1,36 @@
-function retLabel = dtwWrapper(refData, refLabel, testData, DTWType, topC)
-% Updated on Oct 12, 2018
+function retLabel = dtwWrapper(refData, refLabel, testData, DTWType, savePath, topC)
+% Updated on Oct 17, 2018
 % I will update the help once the code is complete
 
 
 % send the data to compare with all refdata and check the 10 lowest. return
 % the highest occurance.
 
-% commandStr = 'python sdtwDist.py';
-% [status, commandOut] = system(commandStr);
-% if status==0
-% fprintf('squared result is %d\n',str2num(commandOut));
-% end
 
 dtwDist = [];
 for iter = 1 : length(refLabel)
     if DTWType == 'soft'
-        dtwDist = [dtwDist; SoftDTW(refData{iter}, testData, 1)];
+        R = SoftDTW(refData{iter}, testData, 1);
     else
-        dtwDist = [dtwDist; HardDTW(refData{iter}, testData)];
+        R = HardDTW(refData{iter}, testData);
     end
+    dtwDist = [dtwDist; R(end:end)];
 end
 
+
 [dtwDistSorted, index] = sort(dtwDist);
+
+
+if DTWType == 'soft'
+    R = SoftDTW(refData{index(1)}, testData, 1);
+else
+    R = HardDTW(refData{index(1)}, testData);
+end
+imagesc(R);
+
+savefig(strcat(fullfile(savePath,DTWType),datestr(clock,'YYYY/mm/dd HH:MM:SS:FFF'),'.fig'));
+saveas(gcf,strcat(fullfile(savePath,DTWType),datestr(clock,'YYYY/mm/dd HH:MM:SS:FFF'),'.png'));
+close;
 
 retLabel = refLabel(index(1 : topC),:);
 
