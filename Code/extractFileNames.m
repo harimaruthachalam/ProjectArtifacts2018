@@ -1,4 +1,4 @@
-function [files] = extractFiles(path)
+function [files] = extractFileNames(path)
 % Updated on July 30, 2018
 % I will update the help once the code is complete
 
