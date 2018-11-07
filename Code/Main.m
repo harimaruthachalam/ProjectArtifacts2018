@@ -12,8 +12,10 @@ testPath = trainPath;
 knn = 0;
 svm = 0;
 dtw = 1;
+applyVAD = 0;
+dataFromPool = 1;
 
-[trainData, trainLabel, testData, testLabel] = extractDataFiles(trainPath, testPath, 1);
+[trainData, trainLabel, testData, testLabel] = extractDataFiles(trainPath, testPath, dataFromPool, applyVAD);
 
 if dtw == 1
     

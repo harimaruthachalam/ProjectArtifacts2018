@@ -1,4 +1,4 @@
-function [trainData, trainLabel, testData, testLabel] = extractDataFiles(trainPath, testPath, isSame)
+function [trainData, trainLabel, testData, testLabel] = extractDataFiles(trainPath, testPath, isSame, applyVAD)
 % Updated on Oct 17, 2018
 % I will update the help once the code is complete
 
@@ -44,7 +44,12 @@ if isSame == 1
         EEG = eeg_checkset( EEG );
         
         for iterEpoch = 1 : EEG.trials
-            cellEYST{size(cellEYST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            cellEYST{size(cellEYST,2) + 1} = data;
         end
         
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 2,'retrieve',1,'study',0);
@@ -55,7 +60,12 @@ if isSame == 1
         EEG = eeg_checkset( EEG );
         
         for iterEpoch = 1 : EEG.trials
-            cellMOST{size(cellMOST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            cellMOST{size(cellMOST,2) + 1} = data;
         end
         
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 3,'retrieve',1,'study',0);
@@ -64,7 +74,12 @@ if isSame == 1
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'gui','off');
         
         for iterEpoch = 1 : EEG.trials
-            cellHTST{size(cellHTST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            cellHTST{size(cellHTST,2) + 1} = data;
         end
         
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 4,'retrieve',1,'study',0);
@@ -74,7 +89,12 @@ if isSame == 1
         EEG = eeg_checkset( EEG );
         
         for iterEpoch = 1 : EEG.trials
-            cellHNST{size(cellHNST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            cellHNST{size(cellHNST,2) + 1} = data;
         end
     end
     
@@ -193,7 +213,12 @@ else
         EEG = eeg_checkset( EEG );
         
         for iterEpoch = 1 : EEG.trials
-            cellEYST{size(cellEYST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            cellEYST{size(cellEYST,2) + 1} = data;
         end
         
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 2,'retrieve',1,'study',0);
@@ -204,7 +229,12 @@ else
         EEG = eeg_checkset( EEG );
         
         for iterEpoch = 1 : EEG.trials
-            cellMOST{size(cellMOST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            cellMOST{size(cellMOST,2) + 1} = data;
         end
         
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 3,'retrieve',1,'study',0);
@@ -213,7 +243,12 @@ else
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'gui','off');
         
         for iterEpoch = 1 : EEG.trials
-            cellHTST{size(cellHTST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            cellHTST{size(cellHTST,2) + 1} = data;
         end
         
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 4,'retrieve',1,'study',0);
@@ -223,7 +258,12 @@ else
         EEG = eeg_checkset( EEG );
         
         for iterEpoch = 1 : EEG.trials
-            cellHNST{size(cellHNST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            cellHNST{size(cellHNST,2) + 1} = data;
         end
     end
     
@@ -292,7 +332,12 @@ else
         EEG = eeg_checkset( EEG );
         
         for iterEpoch = 1 : EEG.trials
-            testCellEYST{size(testCellEYST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            testCellEYST{size(testCellEYST,2) + 1} = data;
         end
         
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 2,'retrieve',1,'study',0);
@@ -303,7 +348,12 @@ else
         EEG = eeg_checkset( EEG );
         
         for iterEpoch = 1 : EEG.trials
-            testCellMOST{size(testCellMOST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            testCellMOST{size(testCellMOST,2) + 1} = data;
         end
         
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 3,'retrieve',1,'study',0);
@@ -312,7 +362,12 @@ else
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'gui','off');
         
         for iterEpoch = 1 : EEG.trials
-            testCellHTST{size(testCellHTST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            testCellHTST{size(testCellHTST,2) + 1} = data;
         end
         
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 4,'retrieve',1,'study',0);
@@ -322,7 +377,12 @@ else
         EEG = eeg_checkset( EEG );
         
         for iterEpoch = 1 : EEG.trials
-            testCellHNST{size(testCellHNST,2) + 1} = EEG.data(:,:,iterEpoch);
+            if applyVAD == 1
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+            else
+                data = EEG.data(:,:,iterEpoch);
+            end
+            testCellHNST{size(testCellHNST,2) + 1} = data;
         end
     end
     
