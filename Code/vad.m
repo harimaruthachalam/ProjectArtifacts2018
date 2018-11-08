@@ -5,7 +5,7 @@ function [signal] = vad(signal, window, overlap, threshold)
 passedWindows = [];
 
 for i = 1 : window - overlap : length(signal)
-    lastSample = min(i + window, length(signal))
+    lastSample = min(i + window, length(signal));
     if mean(signal(i:lastSample)) > threshold
         passedWindows = [passedWindows; i];
     end

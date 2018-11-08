@@ -45,7 +45,7 @@ if isSame == 1
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end
@@ -61,7 +61,7 @@ if isSame == 1
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end
@@ -75,7 +75,7 @@ if isSame == 1
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end
@@ -90,7 +90,7 @@ if isSame == 1
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end
@@ -214,7 +214,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end
@@ -230,7 +230,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end
@@ -244,7 +244,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end
@@ -259,7 +259,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end
@@ -304,7 +304,7 @@ else
     
     for iteratorFile = 1 : size(files,1)
         currentFilename = strcat(files(iteratorFile,:), '_band_0_60_notch50_fil.raw');
-        currentPath = strcat(trainPath,files(iteratorFile,:),'/');
+        currentPath = strcat(testPath,files(iteratorFile,:),'/');
         %     mkdir(fullfile(path,toSavePath));
         
         rawFilename = erase(currentFilename,'_band_0_60_notch50_fil.raw');
@@ -333,7 +333,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end
@@ -349,7 +349,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end
@@ -363,7 +363,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end
@@ -378,7 +378,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)),1)));
+                data = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 20, 10, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 3 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
             else
                 data = EEG.data(:,:,iterEpoch);
             end

@@ -12,7 +12,7 @@ testPath = trainPath;
 knn = 0;
 svm = 0;
 dtw = 1;
-applyVAD = 0;
+applyVAD = 1;
 dataFromPool = 1;
 
 [trainData, trainLabel, testData, testLabel] = extractDataFiles(trainPath, testPath, dataFromPool, applyVAD);
