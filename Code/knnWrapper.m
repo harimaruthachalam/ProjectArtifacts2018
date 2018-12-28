@@ -1,5 +1,5 @@
 function retLabel = knnWrapper(refData, refLabel, testData, topC)
-% Updated on Oct 17, 2018
+% Updated on Dec 28, 2018
 % I will update the help once the code is complete
 
 
@@ -7,9 +7,9 @@ function retLabel = knnWrapper(refData, refLabel, testData, topC)
 % the highest occurance.
 
 
-euclDist = [];
+euclDist = ones(length(refLabel),1) * Inf;
 for iter = 1 : length(refLabel)
-    euclDist = [euclDist; norm(refData{iter}(:) - testData(:))];
+    euclDist(iter) = norm(refData{iter}(:) - testData(:));
 end
 
 
