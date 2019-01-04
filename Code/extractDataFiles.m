@@ -1,9 +1,9 @@
-function [trainData, trainLabel, testData, testLabel] = extractDataFiles(trainPath, testPath, isSame, applyVAD)
-% Updated on Dec 26, 2018
+function [trainData, trainLabel, testData, testLabel] = extractDataFiles(seed, trainPath, testPath, dataFromPool, applyVAD, VADWindow, VADOverlap, feature, standandize, interpolate)
+% Updated on Jan 4, 2019
 % I will update the help once the code is complete
 
-rng(123)
-if isSame == 1
+rng(seed)
+if dataFromPool == true
     files = extractFileNames(trainPath);
     
     cellEYST = {};
@@ -28,16 +28,19 @@ if isSame == 1
         inconfig = textscan(fid, '%s %*[:] %s', 'CommentStyle', '%','HeaderLines',5);
         fclose(fid);
         
-        
-        %EEG = pop_interp(EEG, find(str2double(inconfig{1,2}(1:128)) > 49)', 'spherical');
-        %[ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
-        
+        if interpolate == true
+            EEG = pop_interp(EEG, find(str2double(inconfig{1,2}(1:128)) > 49)', 'spherical');
+            [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
+        end
         EEG = eeg_checkset( EEG );
-        %         for i = 1 : 128
-        %             EEG.data(i,:) = doFilter(EEG.data(i,:));
-        %         end
-        %     EEG.data = movmean(EEG.data,100);
-        %     EEG.data = diff(EEG.data,1,2);
+        if feature == 'M'
+            EEG.data = movmean(EEG.data, 100);
+        elseif feature == 'D'
+            EEG.data = diff(EEG.data,1,2);
+        elseif feature == 'DM'
+            EEG.data = movmean(EEG.data, 100);
+            EEG.data = diff(EEG.data,1,2);
+        end
         
         EEG = pop_epoch( EEG, { 'EYST' }, [0 3], 'newname', strcat(rawFilename, ' Eye Open and Close'), 'epochinfo', 'yes');
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'gui','off');
@@ -45,7 +48,7 @@ if isSame == 1
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -62,7 +65,7 @@ if isSame == 1
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -77,7 +80,7 @@ if isSame == 1
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -93,7 +96,7 @@ if isSame == 1
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -128,25 +131,49 @@ if isSame == 1
     trainLabel = [];
     % [cellHNST{2}(1,:); cellHNST{2}(1,:)]
     for iter = 1 : size(cellHNST,2)
-        trainData = [trainData; cellHNST{iter}(:,:) - mean(cellHNST{iter}(:,:),2)];
+        if standandize == true
+        tempdata = cellHNST{iter}(:,:) - mean(cellHNST{iter}(:,:),2);
+        tempdata = tempdata/std(tempdata(:));
+        trainData = [trainData; tempdata];
+        else
+            trainData = [trainData; cellHNST{iter}(:,:) - mean(cellHNST{iter}(:,:),2)];
+        end
     end
     trainLabel = [trainLabel; repmat('HNST', size(cellHNST,2), 1)];
     
     
     for iter = 1 : size(cellHTST,2)
-        trainData = [trainData; cellHTST{iter}(:,:) - mean(cellHTST{iter}(:,:),2)];
+        if standandize == true
+        tempdata = cellHTST{iter}(:,:) - mean(cellHTST{iter}(:,:),2);
+        tempdata = tempdata/std(tempdata(:));
+        trainData = [trainData; tempdata];
+        else
+                trainData = [trainData; cellHTST{iter}(:,:) - mean(cellHTST{iter}(:,:),2)];
+        end
     end
     trainLabel = [trainLabel; repmat('HTST', size(cellHTST,2), 1)];
     
     
     for iter = 1 : size(cellEYST,2)
-        trainData = [trainData; cellEYST{iter}(:,:) - mean(cellEYST{iter}(:,:),2)];
+        if standandize == true
+        tempdata = cellEYST{iter}(:,:) - mean(cellEYST{iter}(:,:),2);
+        tempdata = tempdata/std(tempdata(:));
+        trainData = [trainData; tempdata];
+        else
+                trainData = [trainData; cellHTST{iter}(:,:) - mean(cellHTST{iter}(:,:),2)];
+        end
     end
     trainLabel = [trainLabel; repmat('EYST', size(cellEYST,2), 1)];
     
     
     for iter = 1 : size(cellMOST,2)
-        trainData = [trainData; cellMOST{iter}(:,:) - mean(cellMOST{iter}(:,:),2)];
+        if standandize == true
+        tempdata = cellMOST{iter}(:,:) - mean(cellMOST{iter}(:,:),2);
+        tempdata = tempdata/std(tempdata(:));
+        trainData = [trainData; tempdata];
+        else
+               trainData = [trainData; cellHTST{iter}(:,:) - mean(cellHTST{iter}(:,:),2)];
+        end
     end
     trainLabel = [trainLabel; repmat('MOST', size(cellMOST,2), 1)];
     
@@ -154,27 +181,50 @@ if isSame == 1
     
     testData = {};
     testLabel = [];
-    % [cellHNST{2}(1,:); cellHNST{2}(1,:)]
     for iter = 1 : size(testCellHNST,2)
-        testData = [testData; testCellHNST{iter}(:,:) - mean(testCellHNST{iter}(:,:),2)];
+        if standandize == true
+        tempdata = testCellHNST{iter}(:,:) - mean(testCellHNST{iter}(:,:),2);
+        tempdata = tempdata/std(tempdata(:));
+        testData = [testData; tempdata];
+        else
+              testData = [testData; testCellHNST{iter}(:,:) - mean(testCellHNST{iter}(:,:),2)];
+        end
     end
     testLabel = [testLabel; repmat('HNST', size(testCellHNST,2), 1)];
     
     
     for iter = 1 : size(testCellHTST,2)
-        testData = [testData; testCellHTST{iter}(:,:) - mean(testCellHTST{iter}(:,:),2)];
+        if standandize == true
+        tempdata = testCellHTST{iter}(:,:) - mean(testCellHTST{iter}(:,:),2);
+        tempdata = tempdata/std(tempdata(:));
+        testData = [testData; tempdata];
+        else
+                testData = [testData; testCellHTST{iter}(:,:) - mean(testCellHTST{iter}(:,:),2)];
+        end
     end
     testLabel = [testLabel; repmat('HTST', size(testCellHTST,2), 1)];
     
     
     for iter = 1 : size(testCellEYST,2)
-        testData = [testData; testCellEYST{iter}(:,:) - mean(testCellEYST{iter}(:,:),2)];
+        if standandize == true
+        tempdata = testCellEYST{iter}(:,:) - mean(testCellEYST{iter}(:,:),2);
+        tempdata = tempdata/std(tempdata(:));
+        testData = [testData; tempdata];
+        else
+               testData = [testData; testCellEYST{iter}(:,:) - mean(testCellEYST{iter}(:,:),2)];
+        end
     end
     testLabel = [testLabel; repmat('EYST', size(testCellEYST,2), 1)];
     
     
     for iter = 1 : size(testCellMOST,2)
-        testData = [testData; testCellMOST{iter}(:,:) - mean(testCellMOST{iter}(:,:),2)];
+        if standandize == true
+        tempdata = testCellMOST{iter}(:,:) - mean(testCellMOST{iter}(:,:),2);
+        tempdata = tempdata/std(tempdata(:));
+        testData = [testData; tempdata];
+        else
+                testData = [testData; testCellMOST{iter}(:,:) - mean(testCellMOST{iter}(:,:),2)];
+        end
     end
     testLabel = [testLabel; repmat('MOST', size(testCellMOST,2), 1)];
     
@@ -204,13 +254,19 @@ else
         inconfig = textscan(fid, '%s %*[:] %s', 'CommentStyle', '%','HeaderLines',5);
         fclose(fid);
         
-        
-        EEG = pop_interp(EEG, find(str2double(inconfig{1,2}(1:128)) > 49)', 'spherical');
-        [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
-        
+        if interpolate == true
+            EEG = pop_interp(EEG, find(str2double(inconfig{1,2}(1:128)) > 49)', 'spherical');
+            [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
+        end
         EEG = eeg_checkset( EEG );
-        %     EEG.data = movmean(EEG.data,100);
-        %     EEG.data = diff(EEG.data,1,2);
+        if feature == 'M'
+            EEG.data = movmean(EEG.data, 100);
+        elseif feature == 'D'
+            EEG.data = diff(EEG.data,1,2);
+        elseif feature == 'DM'
+            EEG.data = movmean(EEG.data, 100);
+            EEG.data = diff(EEG.data,1,2);
+        end
         
         EEG = pop_epoch( EEG, { 'EYST' }, [0 3], 'newname', strcat(rawFilename, ' Eye Open and Close'), 'epochinfo', 'yes');
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'gui','off');
@@ -218,7 +274,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -235,7 +291,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -250,7 +306,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -266,7 +322,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -311,7 +367,7 @@ else
     
     for iteratorFile = 1 : size(files,1)
         currentFilename = strcat(files(iteratorFile,:), '_band_0_60_notch50_fil.raw');
-        currentPath = strcat(testPath,files(iteratorFile,:),'/');
+        currentPath = strcat(trainPath,files(iteratorFile,:),'/');
         %     mkdir(fullfile(path,toSavePath));
         
         rawFilename = erase(currentFilename,'_band_0_60_notch50_fil.raw');
@@ -326,13 +382,19 @@ else
         inconfig = textscan(fid, '%s %*[:] %s', 'CommentStyle', '%','HeaderLines',5);
         fclose(fid);
         
-        
-        % EEG = pop_interp(EEG, find(str2double(inconfig{1,2}(1:128)) > 49)', 'spherical');
-        % [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
-        
+        if interpolate == true
+            EEG = pop_interp(EEG, find(str2double(inconfig{1,2}(1:128)) > 49)', 'spherical');
+            [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
+        end
         EEG = eeg_checkset( EEG );
-        %     EEG.data = movmean(EEG.data,100);
-        %     EEG.data = diff(EEG.data,1,2);
+        if feature == 'M'
+            EEG.data = movmean(EEG.data, 100);
+        elseif feature == 'D'
+            EEG.data = diff(EEG.data,1,2);
+        elseif feature == 'DM'
+            EEG.data = movmean(EEG.data, 100);
+            EEG.data = diff(EEG.data,1,2);
+        end
         
         EEG = pop_epoch( EEG, { 'EYST' }, [0 3], 'newname', strcat(rawFilename, ' Eye Open and Close'), 'epochinfo', 'yes');
         [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'gui','off');
@@ -340,7 +402,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -357,7 +419,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -372,7 +434,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -388,7 +450,7 @@ else
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), 50, 40, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
