@@ -1,5 +1,5 @@
 function Main(varargin)
-% Updated on Jan 4, 2019
+% Updated on Jan 7, 2019
 % I will update the help once the code is complete
 
 close all;
@@ -20,8 +20,9 @@ seed = 123;
 % feature = 'S'; % S or M or D of DM
 % standandize = 1;
 % topC = 1;
+% toTransform = 0;
 
-if nargin == 10
+if nargin == 11
     knn = varargin{1};
     dtw = varargin{2};
     interpolate = varargin{3};
@@ -32,6 +33,7 @@ if nargin == 10
     feature = varargin{8}; % S or M or D of DM
     standandize = varargin{9};
     topC = varargin{10};
+    toTransform = varargin{11};
 elseif nargin == 0
     knn = 0;
     dtw = 1;
@@ -43,6 +45,7 @@ elseif nargin == 0
     feature = 'S'; % S or M or D of DM
     standandize = 1;
     topC = 1;
+    toTransform = 1;
 else
     error('Invalid Args count');
     return;
@@ -75,7 +78,7 @@ if dtw == 1
         elseif strcmp(testLabel(iter,:), "MOST")
             class4_gt = class4_gt + 1;
         end
-        result{iter} = dtwWrapper(trainData, trainLabel, testData{iter}, 'hard', savePath, topC);
+        result{iter} = dtwWrapper(trainData, trainLabel, testData{iter}, 'hard', toTransform, savePath, topC);
         [uniqueStrings, ~, stringMap] = unique(string(result{iter}(topC,:)));
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, testLabel(iter,:))

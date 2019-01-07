@@ -1,5 +1,5 @@
-function retLabel = dtwWrapper(refData, refLabel, testData, DTWType, savePath, topC)
-% Updated on Dec 26, 2018
+function retLabel = dtwWrapper(refData, refLabel, testData, DTWType, toTransform, savePath, topC)
+% Updated on Jan 7, 2019
 % I will update the help once the code is complete
 
 
@@ -14,7 +14,13 @@ for iter = 1 : length(refLabel)
     %     else
     %         R = HardDTW(refData{iter}, testData);
     %     end
-    R = HardDTW(refData{iter}, testData);
+    if toTransform == true
+        tempRef = filterTransform(refData{iter}, refLabel(iter,:));
+        tempTest = filterTransform(testData, refLabel(iter,:));
+        R = HardDTW(tempRef, tempTest);
+    else
+        R = HardDTW(refData{iter}, testData);
+    end
     dtwDist = [dtwDist; R(end:end)];
 end
 
@@ -28,8 +34,13 @@ if ~isempty(savePath)
     % else
     %     R = HardDTW(refData{index(1)}, testData);
     % end
-    R = HardDTW(refData{index(1)}, testData);
-    
+    if toTransform == true
+        tempRef = filterTransform(refData{index(1)}, refLabel(index(1),:));
+        tempTest = filterTransform(testData, refLabel(index(1),:));
+        R = HardDTW(tempRef, tempTest);
+    else
+        R = HardDTW(refData{index(1)}, testData);
+    end
     imagesc(R);
     mkdir(strcat(fullfile(savePath, DTWType), '/', refLabel(index(1),:)));
     milliSec = datestr(clock,'mm_dd_HH_MM_SS_FFF');

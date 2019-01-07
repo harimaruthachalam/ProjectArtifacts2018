@@ -9,8 +9,8 @@ for iterInterpolate = 1 : length(interpolate)
     for iterFeature = 1 : length(feature)
         for iterStandandize = 1 : length(standandize)
             for iterTopC = 1 : length(topC)
-                logger(strcat("knn = 0; dtw = 1; interpolate = ", string(interpolate(iterInterpolate)), "; applyVAD = 0; VADWindow = 50; VADOverlap = 40; dataFromPool = 1; feature = ", string(feature(iterFeature)), "; standandize = ", string(standandize(iterStandandize)), "; topC = ",string(topC(iterTopC))));
-                Main(0,1,interpolate(iterInterpolate),0,50,40,1,feature(iterFeature),standandize(iterStandandize),topC(iterTopC));
+                logger(strcat("knn = 0; dtw = 1; interpolate = ", string(interpolate(iterInterpolate)), "; applyVAD = 0; VADWindow = 50; VADOverlap = 40; dataFromPool = 1; feature = ", string(feature(iterFeature)), "; standandize = ", string(standandize(iterStandandize)), "; topC = ",string(topC(iterTopC)), "; transorm = 1;"));
+                Main(0,1,interpolate(iterInterpolate),0,50,40,1,feature(iterFeature),standandize(iterStandandize),topC(iterTopC), 1);
             end
             
         end
