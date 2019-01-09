@@ -6,7 +6,7 @@ close all;
 clc;
 
 trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
-savePath = '';
+savePath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Plots/';
 testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
 seed = 123;
 
@@ -42,10 +42,10 @@ elseif nargin == 0
     VADWindow = 50;
     VADOverlap = 40;
     dataFromPool = 1;
-    feature = 'S'; % S or M or D of DM
+    feature = 'M'; % S or M or D of DM
     standandize = 1;
     topC = 1;
-    toTransform = 1;
+    toTransform = 0;
 else
     error('Invalid Args count');
     return;
