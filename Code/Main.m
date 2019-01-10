@@ -1,5 +1,5 @@
 function Main(varargin)
-% Updated on Jan 7, 2019
+% Updated on Jan 10, 2019
 % I will update the help once the code is complete
 
 close all;
@@ -79,7 +79,7 @@ if dtw == 1
             class4_gt = class4_gt + 1;
         end
         result{iter} = dtwWrapper(trainData, trainLabel, testData{iter}, 'hard', toTransform, savePath, topC);
-        [uniqueStrings, ~, stringMap] = unique(string(result{iter}(topC,:)));
+        [uniqueStrings, ~, stringMap] = unique(string(result{iter}(1 : topC,:)));
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, testLabel(iter,:))
             count = count + 1;
@@ -136,7 +136,7 @@ elseif knn == 1
             class4_gt = class4_gt + 1;
         end
         result{iter} = knnWrapper(trainData, trainLabel, testData{iter}, topC);
-        [uniqueStrings, ~, stringMap] = unique(string(result{iter}(topC,:)));
+        [uniqueStrings, ~, stringMap] = unique(string(result{iter}(1 : topC,:)));
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, testLabel(iter,:))
             count = count + 1;
@@ -178,4 +178,5 @@ elseif knn == 1
     disp(class4/(class4_gt) * 100)
     disp([num2str(class4),'/',num2str(class4_gt)])
 end
+save(string(datetime));
 end
