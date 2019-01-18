@@ -27,7 +27,6 @@ end
 
 [dtwDistSorted, index] = sort(dtwDist);
 
-
 if ~isempty(savePath)
     % if DTWType == 'soft'
     %     R = SoftDTW(refData{index(1)}, testData, 1);

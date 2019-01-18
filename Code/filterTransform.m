@@ -15,7 +15,7 @@ elseif class == 'MOST'
 end
 
 channels = fetchComponentsForRegion(region);
-filterVector(channels) = 3;
+filterVector(channels) = 1.3;
 
 signal = signal .* filterVector;
 

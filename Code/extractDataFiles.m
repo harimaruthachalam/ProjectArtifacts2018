@@ -1,5 +1,5 @@
-function [trainData, trainLabel, testData, testLabel] = extractDataFiles(seed, trainPath, testPath, dataFromPool, applyVAD, VADWindow, VADOverlap, feature, standandize, interpolate)
-% Updated on Jan 4, 2019
+function [trainData, trainLabel, testData, testLabel] = extractDataFiles(seed, trainPath, testPath, dataFromPool, applyVAD, VADWindow, VADOverlap, feature, standandize, interpolate, trainPercent)
+% Updated on Jan 11, 2019
 % I will update the help once the code is complete
 
 rng(seed)
@@ -48,7 +48,8 @@ if dataFromPool == true
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'EYST');
+%                 [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -65,7 +66,8 @@ if dataFromPool == true
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'MOST');
+%                 [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -80,7 +82,8 @@ if dataFromPool == true
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'HTST');
+%                 [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -96,7 +99,8 @@ if dataFromPool == true
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
+                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'HNST');
+%                 [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
                 data = EEG.data(:,:,iterEpoch);
@@ -114,22 +118,34 @@ if dataFromPool == true
     perm = randperm(size(cellMOST, 2));
     cellMOST = cellMOST(perm);
     
+    testPercent = 100 - trainPercent;
     
-    testCellHNST = cellHNST(1 : ceil(size(cellHNST,2)/2));
-    testCellEYST = cellEYST(1 : ceil(size(cellEYST,2)/2));
-    testCellHTST = cellHTST(1 : ceil(size(cellHTST,2)/2));
-    testCellMOST = cellMOST(1 : ceil(size(cellMOST,2)/2));
+    testCellHNST = cellHNST(1 : ceil(size(cellHNST,2) * (testPercent/100)));
+    testCellEYST = cellEYST(1 : ceil(size(cellEYST,2) * (testPercent/100)));
+    testCellHTST = cellHTST(1 : ceil(size(cellHTST,2) * (testPercent/100)));
+    testCellMOST = cellMOST(1 : ceil(size(cellMOST,2) * (testPercent/100)));
     
-    cellEYST = cellEYST(ceil(size(cellEYST,2)/2) + 1 : end);
-    cellHNST = cellHNST(ceil(size(cellHNST,2)/2) + 1 : end);
-    cellHTST = cellHTST(ceil(size(cellHTST,2)/2) + 1 : end);
-    cellMOST = cellMOST(ceil(size(cellMOST,2)/2) + 1 : end);
+    cellEYST = cellEYST(ceil(size(cellEYST,2) * (testPercent/100)) + 1 : end);
+    cellHNST = cellHNST(ceil(size(cellHNST,2) * (testPercent/100)) + 1 : end);
+    cellHTST = cellHTST(ceil(size(cellHTST,2) * (testPercent/100)) + 1 : end);
+    cellMOST = cellMOST(ceil(size(cellMOST,2) * (testPercent/100)) + 1 : end);
     
     
     
     trainData = {};
     trainLabel = [];
     % [cellHNST{2}(1,:); cellHNST{2}(1,:)]
+    for iter = 1 : size(cellEYST,2)
+        if standandize == true
+            tempdata = cellEYST{iter}(:,:) - mean(cellEYST{iter}(:,:),2);
+            tempdata = tempdata/std(tempdata(:));
+            trainData = [trainData; tempdata];
+        else
+            trainData = [trainData; cellEYST{iter}(:,:) - mean(cellEYST{iter}(:,:),2)];
+        end
+    end
+    trainLabel = [trainLabel; repmat('EYST', size(cellEYST,2), 1)];
+    
     for iter = 1 : size(cellHNST,2)
         if standandize == true
             tempdata = cellHNST{iter}(:,:) - mean(cellHNST{iter}(:,:),2);
@@ -154,16 +170,6 @@ if dataFromPool == true
     trainLabel = [trainLabel; repmat('HTST', size(cellHTST,2), 1)];
     
     
-    for iter = 1 : size(cellEYST,2)
-        if standandize == true
-            tempdata = cellEYST{iter}(:,:) - mean(cellEYST{iter}(:,:),2);
-            tempdata = tempdata/std(tempdata(:));
-            trainData = [trainData; tempdata];
-        else
-            trainData = [trainData; cellEYST{iter}(:,:) - mean(cellEYST{iter}(:,:),2)];
-        end
-    end
-    trainLabel = [trainLabel; repmat('EYST', size(cellEYST,2), 1)];
     
     
     for iter = 1 : size(cellMOST,2)
@@ -181,6 +187,19 @@ if dataFromPool == true
     
     testData = {};
     testLabel = [];
+    
+    
+    for iter = 1 : size(testCellEYST,2)
+        if standandize == true
+            tempdata = testCellEYST{iter}(:,:) - mean(testCellEYST{iter}(:,:),2);
+            tempdata = tempdata/std(tempdata(:));
+            testData = [testData; tempdata];
+        else
+            testData = [testData; testCellEYST{iter}(:,:) - mean(testCellEYST{iter}(:,:),2)];
+        end
+    end
+    testLabel = [testLabel; repmat('EYST', size(testCellEYST,2), 1)];
+    
     for iter = 1 : size(testCellHNST,2)
         if standandize == true
             tempdata = testCellHNST{iter}(:,:) - mean(testCellHNST{iter}(:,:),2);
@@ -203,18 +222,6 @@ if dataFromPool == true
         end
     end
     testLabel = [testLabel; repmat('HTST', size(testCellHTST,2), 1)];
-    
-    
-    for iter = 1 : size(testCellEYST,2)
-        if standandize == true
-            tempdata = testCellEYST{iter}(:,:) - mean(testCellEYST{iter}(:,:),2);
-            tempdata = tempdata/std(tempdata(:));
-            testData = [testData; tempdata];
-        else
-            testData = [testData; testCellEYST{iter}(:,:) - mean(testCellEYST{iter}(:,:),2)];
-        end
-    end
-    testLabel = [testLabel; repmat('EYST', size(testCellEYST,2), 1)];
     
     
     for iter = 1 : size(testCellMOST,2)

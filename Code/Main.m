@@ -1,5 +1,5 @@
 function Main(varargin)
-% Updated on Jan 10, 2019
+% Updated on Jan 11, 2019
 % I will update the help once the code is complete
 
 close all;
@@ -7,7 +7,7 @@ clc;
 
 trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
 savePath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Plots/';
-testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
+testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
 seed = 123;
 
 % knn = 0;
@@ -22,7 +22,7 @@ seed = 123;
 % topC = 1;
 % toTransform = 0;
 
-if nargin == 11
+if nargin == 12
     knn = varargin{1};
     dtw = varargin{2};
     interpolate = varargin{3};
@@ -34,6 +34,7 @@ if nargin == 11
     standandize = varargin{9};
     topC = varargin{10};
     toTransform = varargin{11};
+    trainPercent = varargin{12};
 elseif nargin == 0
     knn = 0;
     dtw = 1;
@@ -46,13 +47,14 @@ elseif nargin == 0
     standandize = 1;
     topC = 1;
     toTransform = 0;
+    trainPercent = 50;
 else
     error('Invalid Args count');
     return;
 end
 
 
-[trainData, trainLabel, testData, testLabel] = extractDataFiles(seed, trainPath, testPath, dataFromPool, applyVAD, VADWindow, VADOverlap, feature, standandize, interpolate);
+[trainData, trainLabel, testData, testLabel] = extractDataFiles(seed, trainPath, testPath, dataFromPool, applyVAD, VADWindow, VADOverlap, feature, standandize, interpolate, trainPercent);
 
 count = 0;
 class1 = 0;
@@ -67,7 +69,7 @@ result = cell(length(testData), 1);
 
 if dtw == 1
     
-    parfor iter = 1 : length(testData)
+    for iter = 1 : length(testData)
         disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
         if strcmp(testLabel(iter,:), "EYST")
             class1_gt = class1_gt + 1;
@@ -178,5 +180,5 @@ elseif knn == 1
     disp(class4/(class4_gt) * 100)
     disp([num2str(class4),'/',num2str(class4_gt)])
 end
-save(string(datetime));
+% save(string(datetime));
 end
