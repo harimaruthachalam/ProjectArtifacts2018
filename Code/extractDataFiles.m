@@ -1,4 +1,4 @@
-function [trainData, trainLabel, testData, testLabel] = extractDataFiles(seed, trainPath, testPath, dataFromPool, applyVAD, VADWindow, VADOverlap, feature, standandize, interpolate, trainPercent)
+function [trainData, trainLabel, testData, testLabel] = extractDataFiles(seed, trainPath, testPath, dataFromPool, applyVAD, thresholdSTD, VADWindow, VADOverlap, feature, standandize, interpolate, trainPercent)
 % Updated on Jan 11, 2019
 % I will update the help once the code is complete
 
@@ -48,7 +48,7 @@ if dataFromPool == true
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'EYST');
+                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'EYST', thresholdSTD);
 %                 [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
@@ -66,7 +66,7 @@ if dataFromPool == true
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'MOST');
+                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'MOST', thresholdSTD);
 %                 [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
@@ -82,7 +82,7 @@ if dataFromPool == true
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'HTST');
+                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'HTST', thresholdSTD);
 %                 [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else
@@ -99,7 +99,7 @@ if dataFromPool == true
         
         for iterEpoch = 1 : EEG.trials
             if applyVAD == 1
-                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'HNST');
+                [lower, upper] = findThresholdLimit(EEG.data(:,:,iterEpoch), 'HNST', thresholdSTD);
 %                 [lower, upper] = vad(sum(abs(EEG.data(:,:,iterEpoch)),1), VADWindow, VADOverlap, mean(sum(abs(EEG.data(:,:,iterEpoch)))) - 0 * std(sum(abs(EEG.data(:,:,iterEpoch)))) );
                 data = EEG.data(:,lower:upper,iterEpoch);
             else

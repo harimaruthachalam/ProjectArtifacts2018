@@ -1,4 +1,4 @@
-function [lower, upper] = findThresholdLimit(signal, class)
+function [lower, upper] = findThresholdLimit(signal, class, thresholdSTD)
 % Updated on Jan 18, 2019
 % I will update soon
 
@@ -14,7 +14,7 @@ end
 
 channels = fetchComponentsForRegion(region);
 signalPower = movmean(abs(mean(signal(channels,:))),200);
-threshold = mean(signalPower) - std(signalPower) * 0.5;
+threshold = mean(signalPower) + std(signalPower) * thresholdSTD;
 
 lower = min(find(threshold < signalPower));
 upper = max(find(threshold < signalPower));

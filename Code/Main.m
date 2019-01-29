@@ -1,5 +1,5 @@
 function Main(varargin)
-% Updated on Jan 11, 2019
+% Updated on Jan 29, 2019
 % I will update the help once the code is complete
 
 close all;
@@ -22,7 +22,7 @@ seed = 123;
 % topC = 1;
 % toTransform = 0;
 
-if nargin == 12
+if nargin == 13
     knn = varargin{1};
     dtw = varargin{2};
     interpolate = varargin{3};
@@ -35,11 +35,12 @@ if nargin == 12
     topC = varargin{10};
     toTransform = varargin{11};
     trainPercent = varargin{12};
+    thresholdSTD = varargin{13};
 elseif nargin == 0
     knn = 0;
-    dtw = 1;
+    dtw = 2;
     interpolate = 1;
-    applyVAD = 0;
+    applyVAD = 2;
     VADWindow = 50;
     VADOverlap = 40;
     dataFromPool = 1;
@@ -48,13 +49,13 @@ elseif nargin == 0
     topC = 1;
     toTransform = 0;
     trainPercent = 50;
+    thresholdSTD = -0.5;
 else
     error('Invalid Args count');
     return;
 end
 
-
-[trainData, trainLabel, testData, testLabel] = extractDataFiles(seed, trainPath, testPath, dataFromPool, applyVAD, VADWindow, VADOverlap, feature, standandize, interpolate, trainPercent);
+[trainData, trainLabel, testData, testLabel] = extractDataFiles(seed, trainPath, testPath, dataFromPool, applyVAD, thresholdSTD, VADWindow, VADOverlap, feature, standandize, interpolate, trainPercent);
 
 count = 0;
 class1 = 0;
@@ -67,7 +68,7 @@ class3_gt = 0;
 class4_gt = 0;
 result = cell(length(testData), 1);
 
-if dtw == 1
+if dtw ~= 0
     
     for iter = 1 : length(testData)
         disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
@@ -80,7 +81,7 @@ if dtw == 1
         elseif strcmp(testLabel(iter,:), "MOST")
             class4_gt = class4_gt + 1;
         end
-        result{iter} = dtwWrapper(trainData, trainLabel, testData{iter}, 'hard', toTransform, savePath, topC);
+        result{iter} = dtwWrapper(dtw, trainData, trainLabel, testData{iter}, 'hard', toTransform, savePath, topC, applyVAD, thresholdSTD);
         [uniqueStrings, ~, stringMap] = unique(string(result{iter}(1 : topC,:)));
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, testLabel(iter,:))
