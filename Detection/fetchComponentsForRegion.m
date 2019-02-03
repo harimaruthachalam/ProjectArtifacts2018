@@ -1,5 +1,5 @@
 function [channels] = fetchComponentsForRegion(regionToContribution)
-% Updated on Aug 8, 2018
+% Updated on Feb 3, 2019
 % I will update the help once the code is complete
 
 %% Loading

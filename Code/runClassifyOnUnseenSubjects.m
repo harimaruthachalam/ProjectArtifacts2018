@@ -34,7 +34,7 @@ end
 interpolate = [1];
 feature = ['S'];
 standandize = [1];
-transorm = [1];
+transorm = [0];
 topC = [1 3 5 7];
 thresholdSTD = -1.3;
 trainPercent = 50;

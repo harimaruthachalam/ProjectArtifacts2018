@@ -146,6 +146,8 @@ Data
 Data/
 Test
 Test/
+Train
+Train/
 Plots
 Plots/
 *.m~
