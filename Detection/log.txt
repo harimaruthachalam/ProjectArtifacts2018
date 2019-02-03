@@ -1,4 +1,0 @@
-01-Feb-2019 17:46:39 Threshold:-1
-01-Feb-2019 17:47:39 flagArrayEYST:24392; Both:5752
-01-Feb-2019 17:47:39 flagArrayMOST:26634; Both:12511
-01-Feb-2019 17:47:39 flagArrayNHST:48642; Both:10328

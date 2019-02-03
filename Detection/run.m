@@ -19,19 +19,16 @@ files = extractFileNames(path);
 perm = randperm(size(files, 1));
 files = files(perm,:);
 
-for i = 1 : ceil(size(files, 1)/2)
-    mkdir(trainPath,files(i,:));
-    copyfile([path files(i,:)], [trainPath files(i,:)]);
-end
-
-for i = ceil(size(files, 1)/2) + 1 : size(files, 1)
+for i = 1 : ceil(size(files, 1)/4)
     mkdir(testPath,files(i,:));
     copyfile([path files(i,:)], [testPath files(i,:)]);
 end
 
-thresholdSTD = -1:0.1:1;
+for i = ceil(size(files, 1)/4) + 1 : size(files, 1)
+    mkdir(trainPath,files(i,:));
+    copyfile([path files(i,:)], [trainPath files(i,:)]);
+end
 
-for iterThresholdSTD = 1 : length(thresholdSTD)
-    logger(strcat('Threshold: ', string(thresholdSTD(iterThresholdSTD))))
-    Main(0,0,'S',0, thresholdSTD(iterThresholdSTD));
+logger('Feature: S; topC: 1; thresholdClassWise: -0.5; thresholdSTD: 0');
+Main('S', 1, -0.5, 0);
 end

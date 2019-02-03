@@ -1,13 +1,13 @@
 function Main(varargin)
-% Updated on Jan 29, 2019
+% Updated on Feb 3, 2019
 % I will update the help once the code is complete
 
 close all;
 clc;
 
-trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
+trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Train/';
 savePath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Plots/';
-testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
+testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
 seed = 123;
 
 % knn = 0;
@@ -40,10 +40,10 @@ elseif nargin == 0
     knn = 0;
     dtw = 2;
     interpolate = 1;
-    applyVAD = 2;
+    applyVAD = 2; % 1 - While extract; 2 - While execute
     VADWindow = 50;
     VADOverlap = 40;
-    dataFromPool = 1;
+    dataFromPool = 0;
     feature = 'M'; % S or M or D of DM
     standandize = 1;
     topC = 1;
@@ -70,7 +70,7 @@ result = cell(length(testData), 1);
 
 if dtw ~= 0
     
-    for iter = 1 : length(testData)
+    parfor iter = 1 : length(testData)
         disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
         if strcmp(testLabel(iter,:), "EYST")
             class1_gt = class1_gt + 1;

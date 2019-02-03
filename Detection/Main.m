@@ -19,8 +19,8 @@ if nargin == 4
 elseif nargin == 0
     feature = 'S'; % S or M or D of DM
     topC = 3;
-    thresholdClassWise = -0.5;
-    thresholdSTD = -0;
+    thresholdClassWise = -1;
+    thresholdSTD = -0.8;
 else
     error('Invalid Args count');
     return;
@@ -72,11 +72,11 @@ for iter = 1 : length(testData)
     
     [chuncks, startIndex, endIndex] = getChuncksFromArray(testData{iter}, flagArrayEYST);
     
-    parfor iterChuncks = 1 : length(chuncks)
+    for iterChuncks = 1 : length(chuncks)
         disp(['Processing chunck: ',num2str(iterChuncks),' of ',num2str(length(chuncks)), 'in EYST']);
         
         predictedEYST = predictedEYST + 1;
-        if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+        if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundEYST)
             correctEYST = correctEYST + 1;
         end
         
@@ -86,7 +86,7 @@ for iter = 1 : length(testData)
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, "EYST")
             predictedEYSTd = predictedEYSTd + 1;
-            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundEYST)
                 correctEYSTd = correctEYSTd + 1;
             end
         end
@@ -96,7 +96,7 @@ for iter = 1 : length(testData)
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, "EYST")
             predictedEYSTl = predictedEYSTl + 1;
-            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundEYST)
                 correctEYSTl = correctEYSTl + 1;
             end
         end
@@ -112,7 +112,7 @@ for iter = 1 : length(testData)
         disp(['Processing chunck: ',num2str(iterChuncks),' of ',num2str(length(chuncks)), 'in MOST']);
         
         predictedMOST = predictedMOST + 1;
-        if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+        if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundMOST)
             correctMOST = correctMOST + 1;
         end
         
@@ -122,7 +122,7 @@ for iter = 1 : length(testData)
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, "MOST")
             predictedMOSTd = predictedMOSTd + 1;
-            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundMOST)
                 correctMOSTd = correctMOSTd + 1;
             end
         end
@@ -132,7 +132,7 @@ for iter = 1 : length(testData)
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, "MOST")
             predictedMOSTl = predictedMOSTl + 1;
-            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundMOST)
                 correctMOSTl = correctMOSTl + 1;
             end
         end
@@ -148,7 +148,7 @@ for iter = 1 : length(testData)
         disp(['Processing chunck: ',num2str(iterChuncks),' of ',num2str(length(chuncks)), 'in HNST']);
         
         predictedNHST = predictedNHST + 1;
-        if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+        if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundNHST)
             correctNHST = correctNHST + 1;
         end
         
@@ -158,7 +158,7 @@ for iter = 1 : length(testData)
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, "HNST")
             predictedNHSTd = predictedNHSTd + 1;
-            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundNHST)
                 correctNHSTd = correctNHSTd + 1;
             end
         end
@@ -168,7 +168,7 @@ for iter = 1 : length(testData)
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, "HNST")
             predictedNHSTl = predictedNHSTl + 1;
-            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundNHST)
                 correctNHSTl = correctNHSTl + 1;
             end
         end
@@ -184,7 +184,7 @@ for iter = 1 : length(testData)
         disp(['Processing chunck: ',num2str(iterChuncks),' of ',num2str(length(chuncks)), 'in HTST']);
         
         predictedHTST = predictedHTST + 1;
-        if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+        if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundHTST)
             correctHTST = correctHTST + 1;
         end
         
@@ -194,7 +194,7 @@ for iter = 1 : length(testData)
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, "HTST")
             predictedHTSTd = predictedHTSTd + 1;
-            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundHTST)
                 correctHTSTd = correctHTSTd + 1;
             end
         end
@@ -204,38 +204,38 @@ for iter = 1 : length(testData)
         mostCommonString = uniqueStrings(mode(stringMap));
         if strcmp(mostCommonString, "HTST")
             predictedHTSTl = predictedHTSTl + 1;
-            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), startIndexGroundEYST, endIndexGroundEYST)
+            if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundHTST)
                 correctHTSTl = correctHTSTl + 1;
             end
         end
     end
 end
 
-logger(stcat('EYST Pred: ', string(predictedEYST)));
-logger(stcat('EYST Corr: ', string(correctEYST)));
-logger(stcat('MOST Pred: ', string(predictedMOST)));
-logger(stcat('MOST Corr: ', string(correctMOST)));
-logger(stcat('NHST Pred: ', string(predictedHNST)));
-logger(stcat('NHST Corr: ', string(correctNHST)));
-logger(stcat('NTST Pred: ', string(predictedHTST)));
-logger(stcat('NTST Corr: ', string(correctHTST)));
+logger(strcat('EYST Pred: ', string(predictedEYST)));
+logger(strcat('EYST Corr: ', string(correctEYST)));
+logger(strcat('MOST Pred: ', string(predictedMOST)));
+logger(strcat('MOST Corr: ', string(correctMOST)));
+logger(strcat('NHST Pred: ', string(predictedNHST)));
+logger(strcat('NHST Corr: ', string(correctNHST)));
+logger(strcat('NTST Pred: ', string(predictedHTST)));
+logger(strcat('NTST Corr: ', string(correctHTST)));
 
-logger(stcat('EYST DTW Pred: ', string(predictedEYSTd)));
-logger(stcat('EYST DTW Corr: ', string(correctEYSTd)));
-logger(stcat('MOST DTW Pred: ', string(predictedMOSTd)));
-logger(stcat('MOST DTW Corr: ', string(correctMOSTd)));
-logger(stcat('NHST DTW Pred: ', string(predictedNHSTd)));
-logger(stcat('NHST DTW Corr: ', string(correctNHSTd)));
-logger(stcat('NTST DTW Pred: ', string(predictedHTSTd)));
-logger(stcat('NTST DTW Corr: ', string(correctHTSTd)));
+logger(strcat('EYST DTW Pred: ', string(predictedEYSTd)));
+logger(strcat('EYST DTW Corr: ', string(correctEYSTd)));
+logger(strcat('MOST DTW Pred: ', string(predictedMOSTd)));
+logger(strcat('MOST DTW Corr: ', string(correctMOSTd)));
+logger(strcat('NHST DTW Pred: ', string(predictedNHSTd)));
+logger(strcat('NHST DTW Corr: ', string(correctNHSTd)));
+logger(strcat('NTST DTW Pred: ', string(predictedHTSTd)));
+logger(strcat('NTST DTW Corr: ', string(correctHTSTd)));
 
-logger(stcat('EYST LTW Pred: ', string(predictedEYSTl)));
-logger(stcat('EYST LTW Corr: ', string(correctEYSTl)));
-logger(stcat('MOST LTW Pred: ', string(predictedMOSTl)));
-logger(stcat('MOST LTW Corr: ', string(correctMOSTl)));
-logger(stcat('NHST LTW Pred: ', string(predictedNHSTl)));
-logger(stcat('NHST LTW Corr: ', string(correctNHSTl)));
-logger(stcat('NTST LTW Pred: ', string(predictedHTSTl)));
-logger(stcat('NTST LTW Corr: ', string(correctHTSTl)));
+logger(strcat('EYST LTW Pred: ', string(predictedEYSTl)));
+logger(strcat('EYST LTW Corr: ', string(correctEYSTl)));
+logger(strcat('MOST LTW Pred: ', string(predictedMOSTl)));
+logger(strcat('MOST LTW Corr: ', string(correctMOSTl)));
+logger(strcat('NHST LTW Pred: ', string(predictedNHSTl)));
+logger(strcat('NHST LTW Corr: ', string(correctNHSTl)));
+logger(strcat('NTST LTW Pred: ', string(predictedHTSTl)));
+logger(strcat('NTST LTW Corr: ', string(correctHTSTl)));
 
 end
