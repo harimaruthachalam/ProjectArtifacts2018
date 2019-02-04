@@ -6,7 +6,7 @@ close all;
 clc;
 
 trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Train/';
-savePath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Plots/';
+savePath = '';
 testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
 seed = 123;
 
@@ -70,10 +70,41 @@ result = cell(length(testData), 1);
 
 if dtw ~= 0
     
-    parfor iter = 1 : length(testData)
+    for iter = 1 : length(testData)
+        disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
+        if strcmp(testLabel(iter,:), "EYST")
+            class1_gt = class1_gt + 1;for iter = 1 : length(testData)
         disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
         if strcmp(testLabel(iter,:), "EYST")
             class1_gt = class1_gt + 1;
+        elseif strcmp(testLabel(iter,:), "HNST")
+            class2_gt = class2_gt + 1;
+        elseif strcmp(testLabel(iter,:), "HTST")
+            class3_gt = class3_gt + 1;
+        elseif strcmp(testLabel(iter,:), "MOST")
+            class4_gt = class4_gt + 1;
+        end
+        result{iter} = dtwWrapper(dtw, trainData, trainLabel, testData{iter}, 'hard', toTransform, savePath, topC, applyVAD, thresholdSTD);
+        [uniqueStrings, ~, stringMap] = unique(string(result{iter}(1 : topC,:)));
+        mostCommonString = uniqueStrings(mode(stringMap));
+        if strcmp(mostCommonString, testLabel(iter,:))
+            count = count + 1;
+            if strcmp(mostCommonString, "EYST")
+                class1 = class1 + 1;
+            elseif strcmp(mostCommonString, "HNST")
+                class2 = class2 + 1;
+            elseif strcmp(mostCommonString, "HTST")
+                class3 = class3 + 1;
+            elseif strcmp(mostCommonString, "MOST")
+                class4 = class4 + 1;
+            end
+        else
+            % Will modify soon
+            logger([testLabel(iter,:) ' predicted as ' mostCommonString]);
+            disp([testLabel(iter,:) ' predicted as ' mostCommonString]);
+        end
+    end
+    
         elseif strcmp(testLabel(iter,:), "HNST")
             class2_gt = class2_gt + 1;
         elseif strcmp(testLabel(iter,:), "HTST")

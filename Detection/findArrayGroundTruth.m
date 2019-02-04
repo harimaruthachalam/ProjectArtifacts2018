@@ -4,13 +4,28 @@ function [flagArray, startIndex, endIndex] = findArrayGroundTruth(testLabel, cla
 
 startIndex = [];
 endIndex = [];
-for iter = 1 : size(testLabel, 2)
-    if strcmp(testLabel(iter).type, classStartEvent)
-        startIndex = [startIndex; testLabel(iter).latency];
-        if strcmp(testLabel(iter + 1).type, classEndEvent)
-            endIndex = [endIndex; testLabel(iter + 1).latency];
-        else
-            endIndex = [endIndex; testLabel(iter + 2).latency];
+
+if isempty(classStartEvent) && isempty(classEndEvent)
+    for iter = 1 : size(testLabel, 2)
+        if contains(testLabel(iter).type,'ST')
+            startIndex = [startIndex; testLabel(iter).latency];
+            if contains(testLabel(iter + 1).type, 'ED')
+                endIndex = [endIndex; testLabel(iter + 1).latency];
+            else
+                endIndex = [endIndex; testLabel(iter + 2).latency];
+            end
+        end
+    end
+else
+    
+    for iter = 1 : size(testLabel, 2)
+        if strcmp(testLabel(iter).type, classStartEvent)
+            startIndex = [startIndex; testLabel(iter).latency];
+            if strcmp(testLabel(iter + 1).type, classEndEvent)
+                endIndex = [endIndex; testLabel(iter + 1).latency];
+            else
+                endIndex = [endIndex; testLabel(iter + 2).latency];
+            end
         end
     end
 end

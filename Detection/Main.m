@@ -11,15 +11,11 @@ trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Train/';
 testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
 seed = 123;
 
-if nargin == 4
-    feature = varargin{1}; % S or M or D of DM
-    topC = varargin{2};
-    thresholdClassWise = varargin{3};
-    thresholdSTD = varargin{4};
+if nargin == 2
+    topC = varargin{1};
+    thresholdSTD = varargin{2};
 elseif nargin == 0
-    feature = 'S'; % S or M or D of DM
     topC = 3;
-    thresholdClassWise = -1;
     thresholdSTD = -0.8;
 else
     error('Invalid Args count');
@@ -29,20 +25,12 @@ end
 %% Extract the train and test data
 
 [trainData, trainLabel, testData, testLabel] = extractDataFiles(trainPath, testPath);
-thresholdEYST = fetchClassWiseThreshold(trainData, trainLabel, thresholdClassWise, 'EYST');
-thresholdMOST = fetchClassWiseThreshold(trainData, trainLabel, thresholdClassWise, 'MOST');
-thresholdHNST = fetchClassWiseThreshold(trainData, trainLabel, thresholdClassWise, 'HNST');
-thresholdHTST = fetchClassWiseThreshold(trainData, trainLabel, thresholdClassWise, 'HTST');
 
 %% Detection
 
-predictedEYST = 0;
 correctEYST = 0;
-predictedMOST = 0;
 correctMOST = 0;
-predictedNHST = 0;
 correctNHST = 0;
-predictedHTST = 0;
 correctHTST = 0;
 
 predictedEYSTd = 0;
@@ -66,16 +54,26 @@ correctHTSTl = 0;
 for iter = 1 : length(testData)
     
     disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
-    flagArrayEYST = findThresholdExceed(testData{iter}, 'EYST', thresholdEYST);
+    logger(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
+    flagArrayEYST = findThresholdExceed(testData{iter});
+%     data = testData{iter};
+%     signal = mean(data);
+%     signal = movmean(signal, 100);
+%     signal = movmean(abs(signal),200);
+%     signal = signal ./ movmean(signal,1000);
+%     signal = movmean(signal, 100);
+%     signal = signal - mean(signal);
+%     signal = movmean(signal, 100);
+%     signal = movmean(signal, 1000);
+%     flagArrayEYST = (signal > 0);
     [flagArrayGroundEYST, startIndexGroundEYST, endIndexGroundEYST] = findArrayGroundTruth(testLabel{iter}, 'EYST', 'EYED');
     bothEYST = sum(flagArrayEYST .* flagArrayGroundEYST');
     
     [chuncks, startIndex, endIndex] = getChuncksFromArray(testData{iter}, flagArrayEYST);
     
-    for iterChuncks = 1 : length(chuncks)
+    parfor iterChuncks = 1 : length(chuncks)
         disp(['Processing chunck: ',num2str(iterChuncks),' of ',num2str(length(chuncks)), 'in EYST']);
         
-        predictedEYST = predictedEYST + 1;
         if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundEYST)
             correctEYST = correctEYST + 1;
         end
@@ -102,7 +100,7 @@ for iter = 1 : length(testData)
         end
     end
     
-    flagArrayMOST = findThresholdExceed(testData{iter}, 'MOST', thresholdMOST);
+    flagArrayMOST = findThresholdExceed(testData{iter});
     [flagArrayGroundMOST, startIndexGroundMOST, endIndexGroundMOST] = findArrayGroundTruth(testLabel{iter}, 'MOST', 'MOED');
     bothMOST = sum(flagArrayMOST .* flagArrayGroundMOST');
     
@@ -111,7 +109,6 @@ for iter = 1 : length(testData)
     parfor iterChuncks = 1 : length(chuncks)
         disp(['Processing chunck: ',num2str(iterChuncks),' of ',num2str(length(chuncks)), 'in MOST']);
         
-        predictedMOST = predictedMOST + 1;
         if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundMOST)
             correctMOST = correctMOST + 1;
         end
@@ -138,7 +135,7 @@ for iter = 1 : length(testData)
         end
     end
     
-    flagArrayNHST = findThresholdExceed(testData{iter}, 'HNST', thresholdHNST);
+    flagArrayNHST = findThresholdExceed(testData{iter});
     [flagArrayGroundNHST, startIndexGroundNHST, endIndexGroundNHST] = findArrayGroundTruth(testLabel{iter}, 'HNST', 'NHED');
     bothNHST = sum(flagArrayNHST .* flagArrayGroundNHST');
     
@@ -147,7 +144,6 @@ for iter = 1 : length(testData)
     parfor iterChuncks = 1 : length(chuncks)
         disp(['Processing chunck: ',num2str(iterChuncks),' of ',num2str(length(chuncks)), 'in HNST']);
         
-        predictedNHST = predictedNHST + 1;
         if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundNHST)
             correctNHST = correctNHST + 1;
         end
@@ -174,7 +170,7 @@ for iter = 1 : length(testData)
         end
     end
     
-    flagArrayHTST = findThresholdExceed(testData{iter}, 'HTST', thresholdHTST);
+    flagArrayHTST = findThresholdExceed(testData{iter});
     [flagArrayGroundHTST, startIndexGroundHTST, endIndexGroundHTST] = findArrayGroundTruth(testLabel{iter}, 'HTST', 'HTED');
     bothHTST = sum(flagArrayHTST .* flagArrayGroundHTST');
     
@@ -183,7 +179,6 @@ for iter = 1 : length(testData)
     parfor iterChuncks = 1 : length(chuncks)
         disp(['Processing chunck: ',num2str(iterChuncks),' of ',num2str(length(chuncks)), 'in HTST']);
         
-        predictedHTST = predictedHTST + 1;
         if presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGroundHTST)
             correctHTST = correctHTST + 1;
         end
@@ -211,13 +206,9 @@ for iter = 1 : length(testData)
     end
 end
 
-logger(strcat('EYST Pred: ', string(predictedEYST)));
 logger(strcat('EYST Corr: ', string(correctEYST)));
-logger(strcat('MOST Pred: ', string(predictedMOST)));
 logger(strcat('MOST Corr: ', string(correctMOST)));
-logger(strcat('NHST Pred: ', string(predictedNHST)));
 logger(strcat('NHST Corr: ', string(correctNHST)));
-logger(strcat('NTST Pred: ', string(predictedHTST)));
 logger(strcat('NTST Corr: ', string(correctHTST)));
 
 logger(strcat('EYST DTW Pred: ', string(predictedEYSTd)));

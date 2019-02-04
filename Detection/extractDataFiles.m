@@ -36,7 +36,7 @@ for iteratorFile = 1 : size(files,1)
     EEG = eeg_checkset( EEG );
     
     for iterEpoch = 1 : EEG.trials
-        cellEYST{size(cellEYST,2) + 1} = EEG.data(:,:,iterEpoch);
+        cellEYST{size(cellEYST,2) + 1} = EEG.data(:,:,iterEpoch) - mean(EEG.data(:,:,iterEpoch),2);
     end
     
     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 2,'retrieve',1,'study',0);
@@ -47,7 +47,7 @@ for iteratorFile = 1 : size(files,1)
     EEG = eeg_checkset( EEG );
     
     for iterEpoch = 1 : EEG.trials
-        cellMOST{size(cellMOST,2) + 1} = EEG.data(:,:,iterEpoch);
+        cellMOST{size(cellMOST,2) + 1} = EEG.data(:,:,iterEpoch) - mean(EEG.data(:,:,iterEpoch),2);
     end
     
     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 3,'retrieve',1,'study',0);
@@ -56,7 +56,7 @@ for iteratorFile = 1 : size(files,1)
     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'gui','off');
     
     for iterEpoch = 1 : EEG.trials
-        cellHTST{size(cellHTST,2) + 1} = EEG.data(:,:,iterEpoch);
+        cellHTST{size(cellHTST,2) + 1} = EEG.data(:,:,iterEpoch) - mean(EEG.data(:,:,iterEpoch),2);
     end
     
     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 4,'retrieve',1,'study',0);
@@ -66,7 +66,7 @@ for iteratorFile = 1 : size(files,1)
     EEG = eeg_checkset( EEG );
     
     for iterEpoch = 1 : EEG.trials
-        cellHNST{size(cellHNST,2) + 1} = EEG.data(:,:,iterEpoch);
+        cellHNST{size(cellHNST,2) + 1} = EEG.data(:,:,iterEpoch) - mean(EEG.data(:,:,iterEpoch),2);
     end
 end
 
@@ -134,7 +134,7 @@ for iteratorFile = 1 : size(files,1)
     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
     
     EEG = eeg_checkset( EEG );
-    testData{size(testData,2) + 1} = EEG.data(:, EEG.event(2).latency : EEG.event(size(EEG.event,2)-1).latency);
+    testData{size(testData,2) + 1} = EEG.data(:, EEG.event(2).latency : EEG.event(size(EEG.event,2)-1).latency) - mean(EEG.data(:, EEG.event(2).latency : EEG.event(size(EEG.event,2)-1).latency),2);
     currentLatency = EEG.event(2).latency;
     for eventIter = 1 : size(EEG.event,2)
         EEG.event(eventIter).latency = EEG.event(eventIter).latency - currentLatency;

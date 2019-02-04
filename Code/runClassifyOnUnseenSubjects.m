@@ -19,12 +19,12 @@ files = extractFileNames(path);
 perm = randperm(size(files, 1));
 files = files(perm,:);
 
-for i = 1 : ceil(size(files, 1)/2)
+for i = 1 : ceil(size(files, 1)/4)
     mkdir(testPath,files(i,:));
     copyfile([path files(i,:)], [testPath files(i,:)]);
 end
 
-for i = ceil(size(files, 1)/2) + 1 : size(files, 1)
+for i = ceil(size(files, 1)/4) : size(files, 1)
     mkdir(trainPath,files(i,:));
     copyfile([path files(i,:)], [trainPath files(i,:)]);
 end
@@ -35,8 +35,8 @@ interpolate = [1];
 feature = ['S'];
 standandize = [1];
 transorm = [0];
-topC = [1 3 5 7];
-thresholdSTD = -1.3;
+topC = [5];
+thresholdSTD = -1.5:0.1:1;
 trainPercent = 50;
 
 for iterTrainPercent = 1 : length(trainPercent)

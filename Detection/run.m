@@ -24,11 +24,11 @@ for i = 1 : ceil(size(files, 1)/4)
     copyfile([path files(i,:)], [testPath files(i,:)]);
 end
 
-for i = ceil(size(files, 1)/4) + 1 : size(files, 1)
+for i = ceil(size(files, 1)/4) : size(files, 1)
     mkdir(trainPath,files(i,:));
     copyfile([path files(i,:)], [trainPath files(i,:)]);
 end
 
-logger('Feature: S; topC: 1; thresholdClassWise: -0.5; thresholdSTD: 0');
-Main('S', 1, -0.5, 0);
+logger('topC: 1; thresholdSTD: -0.8');
+Main(1, -0.8);
 end
