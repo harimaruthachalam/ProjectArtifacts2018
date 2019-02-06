@@ -1,5 +1,5 @@
 function Main(varargin)
-% Updated on Feb 1, 2019
+% Updated on Feb 6, 2019
 % I will update the help once the code is complete
 
 close all;
@@ -56,17 +56,9 @@ for iter = 1 : length(testData)
     disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
     logger(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
     flagArrayEYST = findThresholdExceed(testData{iter});
-%     data = testData{iter};
-%     signal = mean(data);
-%     signal = movmean(signal, 100);
-%     signal = movmean(abs(signal),200);
-%     signal = signal ./ movmean(signal,1000);
-%     signal = movmean(signal, 100);
-%     signal = signal - mean(signal);
-%     signal = movmean(signal, 100);
-%     signal = movmean(signal, 1000);
-%     flagArrayEYST = (signal > 0);
-    [flagArrayGroundEYST, startIndexGroundEYST, endIndexGroundEYST] = findArrayGroundTruth(testLabel{iter}, 'EYST', 'EYED');
+    
+
+    [flagArrayGroundEYST, startIndexGroundEYST, endIndexGroundEYST] = findArrayGroundTruth(testLabel{iter}, '', '');
     bothEYST = sum(flagArrayEYST .* flagArrayGroundEYST');
     
     [chuncks, startIndex, endIndex] = getChuncksFromArray(testData{iter}, flagArrayEYST);
@@ -100,7 +92,7 @@ for iter = 1 : length(testData)
         end
     end
     
-    flagArrayMOST = findThresholdExceed(testData{iter});
+    flagArrayMOST = findThresholdExceed(testData{iter}, 'MOST');
     [flagArrayGroundMOST, startIndexGroundMOST, endIndexGroundMOST] = findArrayGroundTruth(testLabel{iter}, 'MOST', 'MOED');
     bothMOST = sum(flagArrayMOST .* flagArrayGroundMOST');
     
@@ -135,7 +127,7 @@ for iter = 1 : length(testData)
         end
     end
     
-    flagArrayNHST = findThresholdExceed(testData{iter});
+    flagArrayNHST = findThresholdExceed(testData{iter}, 'HNST');
     [flagArrayGroundNHST, startIndexGroundNHST, endIndexGroundNHST] = findArrayGroundTruth(testLabel{iter}, 'HNST', 'NHED');
     bothNHST = sum(flagArrayNHST .* flagArrayGroundNHST');
     
@@ -170,7 +162,7 @@ for iter = 1 : length(testData)
         end
     end
     
-    flagArrayHTST = findThresholdExceed(testData{iter});
+    flagArrayHTST = findThresholdExceed(testData{iter}, 'HTST');
     [flagArrayGroundHTST, startIndexGroundHTST, endIndexGroundHTST] = findArrayGroundTruth(testLabel{iter}, 'HTST', 'HTED');
     bothHTST = sum(flagArrayHTST .* flagArrayGroundHTST');
     

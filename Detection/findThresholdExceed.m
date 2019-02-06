@@ -1,19 +1,16 @@
-function [signal] = findThresholdExceed(testData)
-% Updated on Feb 1, 2019
+function [data] = findThresholdExceed(testData, muValueInThreshold)
+% Updated on Feb 6, 2019
 % I will update soon
 
-channels = fetchComponentsForRegion('frontal');
-
 data = testData;
-signal = mean(data(channels,:)) - mean(data(setdiff(1:128,channels),:));
+data = (data).^2;
+data = mean(data);
+data  = movmean(data, 250);
+%data = data ./std(data);
+data = data ./ movmean(data,1000);
 
-signal = movmean(signal, 100);
-signal = movmean(abs(signal),200);
-signal = signal ./ movmean(signal,1000);
-signal = movmean(signal, 100);
-signal = signal - mean(signal);
-signal = movmean(signal, 100);
-signal = movmean(signal, 1000);
-signal = (signal > 0);
+% One stop
+data = data - (mean(data) + muValueInThreshold *  std(data));
+data = (data > 0);
 
 end
