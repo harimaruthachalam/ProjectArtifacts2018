@@ -102,31 +102,27 @@ if dataFromPool == true
     trainLabel = [];
     % [cellHNST{2}(1,:); cellHNST{2}(1,:)]
     for iter = 1 : size(cellEYST,2)
-        tempdata = cellEYST{iter}(:,:) - mean(cellEYST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = cellEYST{iter}(:,:);
         trainData = [trainData; tempdata];
     end
     trainLabel = [trainLabel; repmat('EYST', size(cellEYST,2), 1)];
     
     for iter = 1 : size(cellHNST,2)
-        tempdata = cellHNST{iter}(:,:) - mean(cellHNST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = cellHNST{iter}(:,:);
         trainData = [trainData; tempdata];
     end
     trainLabel = [trainLabel; repmat('HNST', size(cellHNST,2), 1)];
     
     
     for iter = 1 : size(cellHTST,2)
-        tempdata = cellHTST{iter}(:,:) - mean(cellHTST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = cellHTST{iter}(:,:);
         trainData = [trainData; tempdata];
     end
     trainLabel = [trainLabel; repmat('HTST', size(cellHTST,2), 1)];
     
     
     for iter = 1 : size(cellMOST,2)
-        tempdata = cellMOST{iter}(:,:) - mean(cellMOST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = cellMOST{iter}(:,:);
         trainData = [trainData; tempdata];
     end
     trainLabel = [trainLabel; repmat('MOST', size(cellMOST,2), 1)];
@@ -138,31 +134,27 @@ if dataFromPool == true
     
     
     for iter = 1 : size(testCellEYST,2)
-        tempdata = testCellEYST{iter}(:,:) - mean(testCellEYST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = testCellEYST{iter}(:,:);
         testData = [testData; tempdata];
     end
     testLabel = [testLabel; repmat('EYST', size(testCellEYST,2), 1)];
     
     for iter = 1 : size(testCellHNST,2)
-        tempdata = testCellHNST{iter}(:,:) - mean(testCellHNST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = testCellHNST{iter}(:,:);
         testData = [testData; tempdata];
     end
     testLabel = [testLabel; repmat('HNST', size(testCellHNST,2), 1)];
     
     
     for iter = 1 : size(testCellHTST,2)
-        tempdata = testCellHTST{iter}(:,:) - mean(testCellHTST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = testCellHTST{iter}(:,:);
         testData = [testData; tempdata];
     end
     testLabel = [testLabel; repmat('HTST', size(testCellHTST,2), 1)];
     
     
     for iter = 1 : size(testCellMOST,2)
-        tempdata = testCellMOST{iter}(:,:) - mean(testCellMOST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = testCellMOST{iter}(:,:);
         testData = [testData; tempdata];
     end
     testLabel = [testLabel; repmat('MOST', size(testCellMOST,2), 1)];
@@ -244,31 +236,27 @@ else
     trainLabel = [];
     % [cellHNST{2}(1,:); cellHNST{2}(1,:)]
     for iter = 1 : size(cellEYST,2)
-        tempdata = cellEYST{iter}(:,:) - mean(cellEYST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = cellEYST{iter}(:,:);
         trainData = [trainData; tempdata];
     end
     trainLabel = [trainLabel; repmat('EYST', size(cellEYST,2), 1)];
     
     for iter = 1 : size(cellHNST,2)
-        tempdata = cellHNST{iter}(:,:) - mean(cellHNST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = cellHNST{iter}(:,:);
         trainData = [trainData; tempdata];
     end
     trainLabel = [trainLabel; repmat('HNST', size(cellHNST,2), 1)];
     
     
     for iter = 1 : size(cellHTST,2)
-        tempdata = cellHTST{iter}(:,:) - mean(cellHTST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = cellHTST{iter}(:,:);
         trainData = [trainData; tempdata];
     end
     trainLabel = [trainLabel; repmat('HTST', size(cellHTST,2), 1)];
     
     
     for iter = 1 : size(cellMOST,2)
-        tempdata = cellMOST{iter}(:,:) - mean(cellMOST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = cellMOST{iter}(:,:);
         trainData = [trainData; tempdata];
     end
     trainLabel = [trainLabel; repmat('MOST', size(cellMOST,2), 1)];
@@ -351,31 +339,27 @@ else
     
     
     for iter = 1 : size(testCellEYST,2)
-        tempdata = testCellEYST{iter}(:,:) - mean(testCellEYST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = testCellEYST{iter}(:,:);
         testData = [testData; tempdata];
     end
     testLabel = [testLabel; repmat('EYST', size(testCellEYST,2), 1)];
     
     for iter = 1 : size(testCellHNST,2)
-        tempdata = testCellHNST{iter}(:,:) - mean(testCellHNST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = testCellHNST{iter}(:,:);
         testData = [testData; tempdata];
     end
     testLabel = [testLabel; repmat('HNST', size(testCellHNST,2), 1)];
     
     
     for iter = 1 : size(testCellHTST,2)
-        tempdata = testCellHTST{iter}(:,:) - mean(testCellHTST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = testCellHTST{iter}(:,:);
         testData = [testData; tempdata];
     end
     testLabel = [testLabel; repmat('HTST', size(testCellHTST,2), 1)];
     
     
     for iter = 1 : size(testCellMOST,2)
-        tempdata = testCellMOST{iter}(:,:) - mean(testCellMOST{iter}(:,:),2);
-        tempdata = tempdata/std(tempdata(:));
+        tempdata = testCellMOST{iter}(:,:);
         testData = [testData; tempdata];
     end
     testLabel = [testLabel; repmat('MOST', size(testCellMOST,2), 1)];

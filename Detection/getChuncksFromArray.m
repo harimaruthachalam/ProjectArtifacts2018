@@ -15,9 +15,9 @@ while index <= length(flagArray)
             index = index + 1;
         end
         if (index - start) > 100
-            startIndex = [startIndex; max(start - 50, 1)];
-            endIndex = [endIndex; min(index + 50, length(flagArray))];
-            chuncks{size(chuncks,2) + 1} = data(:, max(start - 50, 1) : min(index + 50, length(flagArray)));
+            startIndex = [startIndex; start];
+            endIndex = [endIndex; index];
+            chuncks{size(chuncks,2) + 1} = data(:, start : index);
         end
     end
     index = index + 1;

@@ -12,7 +12,7 @@ data  = movmean(data, 250);
 data = data - (mean(data) + muValueInThreshold *  std(data));
 data = (data > 0);
 
-lower = min(find(threshold < data));
-upper = max(find(threshold < data));
+lower = min(find(data));
+upper = max(find(data));
 
 end

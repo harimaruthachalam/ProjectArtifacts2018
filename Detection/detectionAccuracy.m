@@ -1,5 +1,5 @@
 function detectionAccuracy
-% Updated on Feb 1, 2019
+% Updated on Feb 7, 2019
 % I will update soon
 
 close all;
@@ -9,7 +9,7 @@ testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
 
 [~, ~, testData, testLabel] = extractDataFiles('', testPath);
 
-muValue = -1 : 0.1 : 1;
+muValue = -1 : 0.1 : 1.5;
 
 for iterMu = 1 : length(muValue)
     
@@ -34,7 +34,14 @@ for iterMu = 1 : length(muValue)
         [chuncks, ~, ~] = getChuncksFromArray(testData{iter}, flagArrayGround);
         total = total + length(chuncks);
     end
-    logger(['Mu Value: ',num2str(muValue(iterMu)),'; Total : ',num2str(total),'; Predicted : ',num2str(predicted),'; Correct : ',num2str(correct)]);
+    tp = min(correct, total);
+    fp = max(predicted - correct, 0);
+    fn = max(total - predicted, 0);
+    
+    precision = tp / (tp + fp);
+    recall = tp / (tp + fn);
+    F1 = (2 * precision * recall) / (precision + recall);
+    logger(['Mu Value: ',num2str(muValue(iterMu)),'; F1 : ',num2str(F1),' Total : ',num2str(total),'; Predicted : ',num2str(predicted),'; Correct : ',num2str(correct)]);
     
 end
 end

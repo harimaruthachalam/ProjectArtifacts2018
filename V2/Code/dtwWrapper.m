@@ -9,11 +9,14 @@ function retLabel = dtwWrapper(dtw, refData, refLabel, testData, topC, muValueIn
 
 dtwDist = [];
 for iter = 1 : length(refLabel)
-    [lowerRef, upperRef] = findThresholdLimit(refData{iter}, muValueInThreshold);
-    [lowerTest, upperTest] = findThresholdLimit(testData, muValueInThreshold);
+    [lowerRef, upperRef] = findThresholdExceedLimits(refData{iter}, muValueInThreshold);
+    [lowerTest, upperTest] = findThresholdExceedLimits(testData, muValueInThreshold);
     
-    tRef =  refData{iter}(:,lowerRef:upperRef);
-    tTest = testData(:,lowerTest:upperTest);
+    tRef = standardize(refData{iter});
+    tTest = standardize(testData);
+    
+    tRef =  tRef(:,lowerRef:upperRef);
+    tTest = tTest(:,lowerTest:upperTest);
     if dtw == 'T'
         [R, ~] = DTW(tRef, tTest, true);
     elseif dtw == 'N'
@@ -25,10 +28,9 @@ for iter = 1 : length(refLabel)
     else
         [R, ~] = DTW(tRef, tTest, false);
     end
-    
+   
+dtwDist = [dtwDist; R(end:end)]; 
 end
-dtwDist = [dtwDist; R(end:end)];
-
 
 [~, index] = sort(dtwDist);
 
