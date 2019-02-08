@@ -759,3 +759,39 @@
 06-Feb-2019 22:24:40 vv
 06-Feb-2019 22:24:40 cc
 06-Feb-2019 22:25:15 ccccvvcc
+07-Feb-2019 15:21:07 classifier = 1; dtw = S; dataFromPool = 0; feature = S; topC = 1; trainPercent = 50; muValueInThreshold: 0.6
+07-Feb-2019 15:21:25 classifier = 1; dtw = S; dataFromPool = 0; feature = S; topC = 1; trainPercent = 50; muValueInThreshold: 0.6
+07-Feb-2019 15:22:16 classifier = 1; dtw = S; dataFromPool = 0; feature = S; topC = 1; trainPercent = 50; muValueInThreshold: 0.6
+07-Feb-2019 15:24:31 HNST predicted as HTST
+07-Feb-2019 15:24:34 HNST predicted as HTST
+07-Feb-2019 15:24:52 HNST predicted as HTST
+07-Feb-2019 15:24:53 HNST predicted as EYST
+07-Feb-2019 15:24:57 HTST predicted as HNST
+07-Feb-2019 15:25:09 HNST predicted as EYST
+07-Feb-2019 15:25:10 HNST predicted as HTST
+07-Feb-2019 15:25:13 HTST predicted as MOST
+07-Feb-2019 15:25:25 HNST predicted as EYST
+07-Feb-2019 15:25:31 HTST predicted as MOST
+07-Feb-2019 15:25:48 HTST predicted as MOST
+07-Feb-2019 15:25:51 HNST predicted as EYST
+07-Feb-2019 15:26:01 MOST predicted as HTST
+07-Feb-2019 15:26:05 HTST predicted as MOST
+07-Feb-2019 15:26:06 HNST predicted as EYST
+07-Feb-2019 15:26:24 HTST predicted as HNST
+07-Feb-2019 15:26:29 MOST predicted as HNST
+07-Feb-2019 15:26:40 HTST predicted as MOST
+07-Feb-2019 15:26:42 MOST predicted as HTST
+07-Feb-2019 15:26:51 MOST predicted as HTST
+07-Feb-2019 15:26:57 MOST predicted as HNST
+07-Feb-2019 15:27:07 MOST predicted as EYST
+07-Feb-2019 15:27:13 MOST predicted as HTST
+07-Feb-2019 15:27:17 MOST predicted as HTST
+07-Feb-2019 15:27:30 MOST predicted as HTST
+07-Feb-2019 15:27:30 Total Accuracy % 15/40
+07-Feb-2019 15:27:30 Eye TP Rate d 10/10
+07-Feb-2019 15:27:30 HN TP Rate 
+ 1/10
+07-Feb-2019 15:27:30 HT TP Rate  3/10
+07-Feb-2019 15:27:30 MO TP Rate 
+ 1/10
+07-Feb-2019 15:27:30 classifier = 1; dtw = S; dataFromPool = 0; feature = S; topC = 3; trainPercent = 50; muValueInThreshold: 0.6
