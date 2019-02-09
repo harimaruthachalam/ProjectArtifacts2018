@@ -5,9 +5,9 @@ function detectionAccuracy
 close all;
 clc;
 
-testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
+path = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
 
-[~, ~, testData, testLabel] = extractDataFiles('', testPath);
+[testData, testLabel] = extractAllDataFiles(path);
 
 muValue = -1 : 0.1 : 1.5;
 

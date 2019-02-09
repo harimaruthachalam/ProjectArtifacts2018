@@ -1,4 +1,4 @@
-function [trainData, trainLabel, testData, testLabelStruct] = extractDataFiles(trainPath, testPath)
+function [trainData, trainLabel, testData, testLabelStruct] = extractDataFiles(trainPath, testPath, feature)
 % Updated on Jan 31, 2019
 % I will update the help once the code is complete
 
@@ -30,6 +30,9 @@ for iteratorFile = 1 : size(files,1)
     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname',strcat(rawFilename, ' Interpolated'),'gui','off');
     
     EEG = eeg_checkset( EEG );
+    if feature == 'M'
+        EEG.data = movmean(EEG.data, 100);
+    end
     
     EEG = pop_epoch( EEG, { 'EYST' }, [0 3], 'newname', strcat(rawFilename, ' Eye Open and Close'), 'epochinfo', 'yes');
     [ALLEEG EEG CURRENTSET] = pop_newset(ALLEEG, EEG, 1,'gui','off');
@@ -74,35 +77,35 @@ trainData = {};
 trainLabel = [];
 % [cellHNST{2}(1,:); cellHNST{2}(1,:)]
 for iter = 1 : size(cellEYST,2)
-%     tempdata = cellEYST{iter}(:,:) - mean(cellEYST{iter}(:,:),2);
-%     tempdata = tempdata/std(tempdata(:));
-%     trainData = [trainData; tempdata];
+    %     tempdata = cellEYST{iter}(:,:) - mean(cellEYST{iter}(:,:),2);
+    %     tempdata = tempdata/std(tempdata(:));
+    %     trainData = [trainData; tempdata];
     trainData = [trainData; cellEYST{iter}(:,:)];
 end
 trainLabel = [trainLabel; repmat('EYST', size(cellEYST,2), 1)];
 
 for iter = 1 : size(cellHNST,2)
-%     tempdata = cellHNST{iter}(:,:) - mean(cellHNST{iter}(:,:),2);
-%     tempdata = tempdata/std(tempdata(:));
-%     trainData = [trainData; tempdata];
+    %     tempdata = cellHNST{iter}(:,:) - mean(cellHNST{iter}(:,:),2);
+    %     tempdata = tempdata/std(tempdata(:));
+    %     trainData = [trainData; tempdata];
     trainData = [trainData; cellHNST{iter}(:,:)];
 end
 trainLabel = [trainLabel; repmat('HNST', size(cellHNST,2), 1)];
 
 
 for iter = 1 : size(cellHTST,2)
-%     tempdata = cellHTST{iter}(:,:) - mean(cellHTST{iter}(:,:),2);
-%     tempdata = tempdata/std(tempdata(:));
-%     trainData = [trainData; tempdata];
+    %     tempdata = cellHTST{iter}(:,:) - mean(cellHTST{iter}(:,:),2);
+    %     tempdata = tempdata/std(tempdata(:));
+    %     trainData = [trainData; tempdata];
     trainData = [trainData; cellHTST{iter}(:,:)];
 end
 trainLabel = [trainLabel; repmat('HTST', size(cellHTST,2), 1)];
 
 
 for iter = 1 : size(cellMOST,2)
-%     tempdata = cellMOST{iter}(:,:) - mean(cellMOST{iter}(:,:),2);
-%     tempdata = tempdata/std(tempdata(:));
-%     trainData = [trainData; tempdata];
+    %     tempdata = cellMOST{iter}(:,:) - mean(cellMOST{iter}(:,:),2);
+    %     tempdata = tempdata/std(tempdata(:));
+    %     trainData = [trainData; tempdata];
     trainData = [trainData; cellMOST{iter}(:,:)];
 end
 trainLabel = [trainLabel; repmat('MOST', size(cellMOST,2), 1)];

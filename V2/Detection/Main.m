@@ -7,25 +7,27 @@ clc;
 
 %% Set the hyperparameters
 
-if nargin == 10
-    trainPath = varargin{1};
-    testPath = varargin{2};
-    classifier = varargin{3}; % 1 - DTW; 2 - LTW;
-    dtwType = varargin{4}; % S - Simple; T - Time Sync; N - Normalized; B - Both;
-    dataFromPool = varargin{5};
-    feature = varargin{6}; % S or M
-    topC = varargin{7};
-    trainPercent = varargin{8};
-    thresholdC = varargin{9};
-    thresholdD = varargin{10};
+if nargin == 11
+    path = varargin{1};
+    trainPath = varargin{2};
+    testPath = varargin{3};
+    classifier = varargin{4}; % 1 - DTW; 2 - LTW;
+    dtwType = varargin{5}; % S - Simple; T - Time Sync; N - Normalized; B - Both;
+    dataFromPool = varargin{6};
+    feature = varargin{7}; % S or M
+    topC = varargin{8};
+    trainPercent = varargin{9};
+    thresholdC = varargin{10};
+    thresholdD = varargin{11};
 elseif nargin == 0
+    path = '/home/hari/Documents/Projects/ProjectArtifacts2018/Train/';
     trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Train/';
     testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
     classifier = 1; % 1 - DTW; 2 - LTW;
     dtwType = 'S'; % S - Simple; T - Time Sync; N - Normalized; B - Both;
     dataFromPool = 1;
-    feature = 'M'; % S or M
-    topC = 1;
+    feature = 'S'; % S or M
+    topC = 3;
     trainPercent = 50;
     thresholdC = -0.8;
     thresholdD = -0.8;
@@ -35,14 +37,16 @@ else
 end
 
 %% Extract the train and test data
-
-[trainData, trainLabel, testData, testLabel] = extractDataFiles(trainPath, testPath);
+if dataFromPool == true
+    [trainData, trainLabel, testData, testLabel] = extractDataFilesForPool(path, feature, trainPercent);
+else
+    [trainData, trainLabel, testData, testLabel] = extractDataFiles(trainPath, testPath, feature);
+end
 
 %% Detection
 
 correct = 0;
 predicted = 0;
-total = 0;
 
 count = 0;
 classEYST = 0;
@@ -60,6 +64,10 @@ for iter = 1 : length(testData)
     logger(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
     flagArray = findThresholdExceed(testData{iter}, thresholdD);
     
+    if feature == 'M'
+        testData{iter} = movmean(testData{iter}, 100);
+    end
+    
     [flagArrayGround, ~, ~] = findArrayGroundTruth(testLabel{iter}, '', '');
     
     [chuncks, startIndex, endIndex] = getChuncksFromArray(testData{iter}, flagArray);
@@ -67,7 +75,7 @@ for iter = 1 : length(testData)
     
     chunkLabels = char(zeros(length(chuncks),4));
     
-    parfor iterChuncks = 1 : length(chuncks)
+    for iterChuncks = 1 : length(chuncks)
         disp(['Processing chunck: ',num2str(iterChuncks),' of ',num2str(length(chuncks))]);
         result = presentInWindow(startIndex(iterChuncks), endIndex(iterChuncks), flagArrayGround) && length(getLabelInTheWindow(startIndex(iterChuncks), endIndex(iterChuncks), testLabel{iter})) == 4;
         
@@ -110,8 +118,6 @@ for iter = 1 : length(testData)
             end
         end
     end
-    [chuncks, ~, ~] = getChuncksFromArray(testData{iter}, flagArrayGround);
-    total = total + length(chuncks);
 end
 
 
