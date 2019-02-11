@@ -1,5 +1,5 @@
 function retLabel = ltwWrapper(refData, refLabel, testData, topC, muValueInThreshold)
-% Updated on Feb 6, 2019
+% Updated on Feb 11, 2019
 % I will update the help once the code is complete
 
 
@@ -22,7 +22,7 @@ for iter = 1 : length(refLabel)
         tRef(i, :) = interp1(refLin, refData{iter}(i,lowerRef:upperRef), refInterpLin, 'spline');
         tTest(i, :) = interp1(tesLin, testData(i,lowerTest:upperTest), tesInterpLin, 'spline');
     end
-    dtwDist = [dtwDist; norm(tRef - tTest)];
+    dtwDist = [dtwDist; sum(diag(pdist2(tRef', tTest', 'squaredeuclidean')))];
 end
 
 

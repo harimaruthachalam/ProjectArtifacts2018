@@ -73,9 +73,6 @@ if dtw ~= 0
     for iter = 1 : length(testData)
         disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
         if strcmp(testLabel(iter,:), "EYST")
-            class1_gt = class1_gt + 1;for iter = 1 : length(testData)
-        disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
-        if strcmp(testLabel(iter,:), "EYST")
             class1_gt = class1_gt + 1;
         elseif strcmp(testLabel(iter,:), "HNST")
             class2_gt = class2_gt + 1;
@@ -104,7 +101,10 @@ if dtw ~= 0
             disp([testLabel(iter,:) ' predicted as ' mostCommonString]);
         end
     end
-    
+    for iter = 1 : length(testData)
+        disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
+        if strcmp(testLabel(iter,:), "EYST")
+            class1_gt = class1_gt + 1;
         elseif strcmp(testLabel(iter,:), "HNST")
             class2_gt = class2_gt + 1;
         elseif strcmp(testLabel(iter,:), "HTST")

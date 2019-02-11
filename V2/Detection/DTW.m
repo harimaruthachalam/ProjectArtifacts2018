@@ -45,7 +45,7 @@ while ((m+n)~=2)
         m=m-1;
     else
         if isTimeSync == true
-            [~,number]=min([D(m,n-1),D(m-1,n-1)]);
+            [~,number]=min([R(m,n-1),R(m-1,n-1)]);
             
             switch number
                 case 1
@@ -55,7 +55,7 @@ while ((m+n)~=2)
                     n=n-1;
             end
         else
-             [~,number]=min([D(m-1,n),D(m,n-1),D(m-1,n-1)]);
+             [~,number]=min([R(m-1,n),R(m,n-1),R(m-1,n-1)]);
             
             switch number
                 case 1

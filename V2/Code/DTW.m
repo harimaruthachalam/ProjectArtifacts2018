@@ -1,5 +1,5 @@
 function [R, k] = DTW(X, Y, isTimeSync, w)
-% Updated on Feb 6, 2019
+% Updated on Feb 11, 2019
 % I will update the help once the code is complete
 % function [R, k] = DTW(X, Y, isTimeSync, w)
 % X - Ref; Y - Test; isTimeSync - No vertical move; w - Beam width; 
@@ -45,7 +45,7 @@ while ((m+n)~=2)
         m=m-1;
     else
         if isTimeSync == true
-            [~,number]=min([D(m,n-1),D(m-1,n-1)]);
+            [~,number]=min([R(m,n-1),R(m-1,n-1)]);
             
             switch number
                 case 1
@@ -55,7 +55,7 @@ while ((m+n)~=2)
                     n=n-1;
             end
         else
-             [~,number]=min([D(m-1,n),D(m,n-1),D(m-1,n-1)]);
+             [~,number]=min([R(m-1,n),R(m,n-1),R(m-1,n-1)]);
             
             switch number
                 case 1

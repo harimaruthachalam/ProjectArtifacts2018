@@ -8,7 +8,7 @@ data = mean(data);
 data  = movmean(data, 250);
 %data = data ./std(data);
 
-% One stop
+% One step
 data = data - (mean(data) + muValueInThreshold *  std(data));
 data = (data > 0);
 

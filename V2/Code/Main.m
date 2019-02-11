@@ -46,7 +46,7 @@ classMOST_gt = 0;
 result = cell(length(testData), 1);
 
 
-parfor iter = 1 : length(testData)
+for iter = 1 : length(testData)
     disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
     if strcmp(testLabel(iter,:), "EYST")
         classEYST_gt = classEYST_gt + 1;
