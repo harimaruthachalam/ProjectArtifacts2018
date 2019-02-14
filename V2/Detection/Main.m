@@ -25,12 +25,12 @@ elseif nargin == 0
     testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
     classifier = 1; % 1 - DTW; 2 - LTW;
     dtwType = 'S'; % S - Simple; T - Time Sync; N - Normalized; B - Both;
-    dataFromPool = 1;
-    feature = 'S'; % S or M
+    dataFromPool = 0;
+    feature = 'M'; % S or M
     topC = 3;
     trainPercent = 50;
-    thresholdC = -0.8;
-    thresholdD = -0.8;
+    thresholdC = -1;
+    thresholdD = 0.9;
 else
     error('Invalid Args count');
     return;
@@ -63,10 +63,6 @@ for iter = 1 : length(testData)
     disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
     logger(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
     flagArray = findThresholdExceed(testData{iter}, thresholdD);
-    
-    if feature == 'M'
-        testData{iter} = movmean(testData{iter}, 100);
-    end
     
     [flagArrayGround, ~, ~] = findArrayGroundTruth(testLabel{iter}, '', '');
     

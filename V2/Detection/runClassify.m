@@ -5,14 +5,14 @@ seed = 1234;
 path = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
 trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Train/';
 testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
-classifier = 1; % 1 - DTW; 2 - LTW;
+classifier = 2; % 1 - DTW; 2 - LTW;
 dtwType = 'S'; % S - Simple; T - Time Sync; N - Normalized; B - Both;
 dataFromPool = 0;
 feature = 'S'; % S or M
-topC = [1 3 5 7 9 13];
+topC = [13];
 trainPercent = [50];
-thresholdC = -1:0.1:1;
-thresholdD = 0.6;
+thresholdC = -1;
+thresholdD = 0.9;
 
 testPercent = 100 - trainPercent(1);
 

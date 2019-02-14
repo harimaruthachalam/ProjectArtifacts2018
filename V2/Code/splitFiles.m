@@ -1,5 +1,5 @@
 function splitFiles(seed, path, trainPath, testPath, testPercent)
-% Updated on Feb 7, 2019
+% Updated on Feb 11, 2019
 % I will update the help once the code is complete
 
 rng(seed);
@@ -20,8 +20,8 @@ end
 
 newTrainFiles = char();
 
-for i = ceil(size(files, 1)/testPercent)  : size(files, 1)
-    j = i - ceil(size(files, 1)/testPercent)  + 1;
+for i = ceil(size(files, 1)/testPercent) + 1 : size(files, 1)
+    j = i - ceil(size(files, 1)/testPercent);
     newTrainFiles(j,:) = files(i,:);
 end
 

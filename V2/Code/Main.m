@@ -17,16 +17,16 @@ if nargin == 10
     trainPercent = varargin{9};
     muValueInThreshold = varargin{10};
 elseif nargin == 0
-    trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Train/';
+    trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
     testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
     seed = 123;
-    classifier = 2; % 1 - DTW; 2 - LTW;
-    dtwType = 'B'; % S - Simple; T - Time Sync; N - Normalized; B - Both;
+    classifier = 1; % 1 - DTW; 2 - LTW;
+    dtwType = 'S'; % S - Simple; T - Time Sync; N - Normalized; B - Both;
     dataFromPool = 1;
-    feature = 'M'; % S or M
+    feature = 'S'; % S or M
     topC = 1;
     trainPercent = 50;
-    muValueInThreshold = 0.6;
+    muValueInThreshold = -0.6;
 else
     error('Invalid Args count');
     return;
@@ -46,7 +46,7 @@ classMOST_gt = 0;
 result = cell(length(testData), 1);
 
 
-for iter = 1 : length(testData)
+parfor iter = 1 : length(testData)
     disp(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
     if strcmp(testLabel(iter,:), "EYST")
         classEYST_gt = classEYST_gt + 1;
