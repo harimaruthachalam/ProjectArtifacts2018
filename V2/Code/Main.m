@@ -82,29 +82,29 @@ parfor iter = 1 : length(testData)
     end
 end
 
+
 disp('count')
 count
-logger(['Total Accuracy ' count/length(testData) * 100 ' ' [num2str(count),'/',num2str(length(testData))]]);
+logger(['Total Accuracy ' num2str(count/length(testData) * 100) ' ' [num2str(count),'/',num2str(length(testData))]]);
 disp('total Accuracy')
 disp(count/length(testData) * 100)
 disp([num2str(count),'/',num2str(length(testData))])
-logger(['Eye TP Rate ' classEYST/(classEYST_gt) * 100 ' ' [num2str(classEYST),'/',num2str(classEYST_gt)]]);
+logger(['Eye TP Rate ' num2str(classEYST/(classEYST_gt) * 100) ' ' [num2str(classEYST),'/',num2str(classEYST_gt)]]);
 disp('Eye TP Rate')
 disp(classEYST/(classEYST_gt) * 100)
 disp([num2str(classEYST),'/',num2str(classEYST_gt)])
-logger(['HN TP Rate ' classHNST/(classHNST_gt) * 100 ' ' [num2str(classHNST),'/',num2str(classHNST_gt)]]);
+logger(['HN TP Rate ' num2str(classHNST/(classHNST_gt) * 100) ' ' [num2str(classHNST),'/',num2str(classHNST_gt)]]);
 disp('HN Accuracy')
 disp(classHNST/(classHNST_gt) * 100)
 disp([num2str(classHNST),'/',num2str(classHNST_gt)])
-logger(['HT TP Rate ' classHTST/(classHTST_gt) * 100 ' ' [num2str(classHTST),'/',num2str(classHTST_gt)]]);
+logger(['HT TP Rate ' num2str(classHTST/(classHTST_gt) * 100) ' ' [num2str(classHTST),'/',num2str(classHTST_gt)]]);
 disp('HT Accuracy')
 disp(classHTST/(classHTST_gt) * 100)
 disp([num2str(classHTST),'/',num2str(classHTST_gt)])
-logger(['MO TP Rate ' classMOST/(classMOST_gt) * 100 ' ' [num2str(classMOST),'/',num2str(classMOST_gt)]]);
+logger(['MO TP Rate ' num2str(classMOST/(classMOST_gt) * 100) ' ' [num2str(classMOST),'/',num2str(classMOST_gt)]]);
 disp('MOST')
 disp(classMOST/(classMOST_gt) * 100)
 disp([num2str(classMOST),'/',num2str(classMOST_gt)])
-
 
 % save(string(datetime));
 end

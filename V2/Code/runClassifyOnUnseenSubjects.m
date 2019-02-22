@@ -4,13 +4,13 @@ function runClassifyOnUnseenSubjects
 path = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
 trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Train/';
 testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
-seed = 1234;
+seed = 123;
 classifier = 1; % 1 - DTW; 2 - LTW;
-dtwType = 'S'; % S - Simple; T - Time Sync; N - Normalized; B - Both;
+dtwType = 'N'; % S - Simple; T - Time Sync; N - Normalized; B - Both;
 dataFromPool = 0;
-feature = 'S'; % S or M
+feature = 'M'; % S or M
 trainPercent = [50];
-topC = [1 3 5 7 9 13];
+topC = [13];
 muValueInThreshold = 0.6;
 
 testPercent = 100 - trainPercent(1);

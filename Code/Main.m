@@ -5,8 +5,8 @@ function Main(varargin)
 close all;
 clc;
 
-trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Train/';
-savePath = '';
+trainPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Data/';
+savePath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Plot/';
 testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
 seed = 123;
 
@@ -43,7 +43,7 @@ elseif nargin == 0
     applyVAD = 2; % 1 - While extract; 2 - While execute
     VADWindow = 50;
     VADOverlap = 40;
-    dataFromPool = 0;
+    dataFromPool = 1;
     feature = 'M'; % S or M or D of DM
     standandize = 1;
     topC = 1;

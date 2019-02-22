@@ -1,5 +1,5 @@
 function retLabel = dtwWrapper(dtw, refData, refLabel, testData, DTWType, toTransform, savePath, topC, applyVAD, thresholdSTD)
-% Updated on Jan 31, 2019
+% Updated on Feb 22, 2019
 % I will update the help once the code is complete
 
 
@@ -73,10 +73,13 @@ if ~isempty(savePath)
         R = HardDTW(refData{index(1)}(:,lowerRef:upperRef), testData(:,lowerTest:upperTest));
     end
     imagesc(R);
+    colorbar;
+    xlabel('Test Sequence (In samples)');
+    ylabel('Reference Sequence (In samples)');
     mkdir(strcat(fullfile(savePath, DTWType), '/', refLabel(index(1),:)));
     milliSec = datestr(clock,'mm_dd_HH_MM_SS_FFF');
     
-    savefig(strcat(fullfile(savePath, DTWType, refLabel(index(1),:)), '/', milliSec,'.fig'));
+    %savefig(strcat(fullfile(savePath, DTWType, refLabel(index(1),:)), '/', milliSec,'.fig'));
     saveas(gcf,strcat(fullfile(savePath, DTWType, refLabel(index(1),:)), '/', milliSec,'.png'));
     close;
 end

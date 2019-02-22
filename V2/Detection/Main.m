@@ -25,7 +25,7 @@ elseif nargin == 0
     testPath = '/home/hari/Documents/Projects/ProjectArtifacts2018/Test/';
     classifier = 1; % 1 - DTW; 2 - LTW;
     dtwType = 'S'; % S - Simple; T - Time Sync; N - Normalized; B - Both;
-    dataFromPool = 0;
+    dataFromPool = 1;
     feature = 'M'; % S or M
     topC = 3;
     trainPercent = 50;
@@ -47,6 +47,7 @@ end
 
 correct = 0;
 predicted = 0;
+total = 0;
 
 count = 0;
 classEYST = 0;
@@ -64,7 +65,8 @@ for iter = 1 : length(testData)
     logger(['Processing test file: ',num2str(iter),' of ',num2str(length(testData))]);
     flagArray = findThresholdExceed(testData{iter}, thresholdD);
     
-    [flagArrayGround, ~, ~] = findArrayGroundTruth(testLabel{iter}, '', '');
+    [flagArrayGround, sIndex, ~] = findArrayGroundTruth(testLabel{iter}, '', '');
+    total = total + length(sIndex);
     
     [chuncks, startIndex, endIndex] = getChuncksFromArray(testData{iter}, flagArray);
     predicted = predicted + length(chuncks);
@@ -88,7 +90,7 @@ for iter = 1 : length(testData)
                 classMOST_gt = classMOST_gt + 1;
             end
             
-            indexes = max(startIndex(iterChuncks) - 250, 1):min(endIndex(iterChuncks) + 250, length(flagArray));
+            indexes = max(startIndex(iterChuncks) - 50, 1):min(endIndex(iterChuncks) + 50, length(flagArray));
             if classifier == 1
                 resultLabel = dtwWrapper(dtwType, trainData, trainLabel, testData{iter}(:,indexes), topC, thresholdC);
             elseif classifier == 2
@@ -116,26 +118,27 @@ for iter = 1 : length(testData)
     end
 end
 
-
+disp('total')
+total
 disp('count')
 count
-logger(['Total Accuracy ' count/length(correct) * 100 ' ' [num2str(count),'/',num2str(correct)]]);
+logger(['Total Accuracy ' num2str(count/correct * 100) ' ' [num2str(count),'/',num2str(correct)]]);
 disp('total Accuracy')
 disp(count/correct * 100)
-disp([num2str(count),'/',num2str(length(correct))])
-logger(['Eye TP Rate ' classEYST/(classEYST_gt) * 100 ' ' [num2str(classEYST),'/',num2str(classEYST_gt)]]);
+disp([num2str(count),'/',num2str(correct)])
+logger(['Eye TP Rate ' num2str(classEYST/(classEYST_gt) * 100) ' ' [num2str(classEYST),'/',num2str(classEYST_gt)]]);
 disp('Eye TP Rate')
 disp(classEYST/(classEYST_gt) * 100)
 disp([num2str(classEYST),'/',num2str(classEYST_gt)])
-logger(['HN TP Rate ' classHNST/(classHNST_gt) * 100 ' ' [num2str(classHNST),'/',num2str(classHNST_gt)]]);
+logger(['HN TP Rate ' num2str(classHNST/(classHNST_gt) * 100) ' ' [num2str(classHNST),'/',num2str(classHNST_gt)]]);
 disp('HN Accuracy')
 disp(classHNST/(classHNST_gt) * 100)
 disp([num2str(classHNST),'/',num2str(classHNST_gt)])
-logger(['HT TP Rate ' classHTST/(classHTST_gt) * 100 ' ' [num2str(classHTST),'/',num2str(classHTST_gt)]]);
+logger(['HT TP Rate ' num2str(classHTST/(classHTST_gt) * 100) ' ' [num2str(classHTST),'/',num2str(classHTST_gt)]]);
 disp('HT Accuracy')
 disp(classHTST/(classHTST_gt) * 100)
 disp([num2str(classHTST),'/',num2str(classHTST_gt)])
-logger(['MO TP Rate ' classMOST/(classMOST_gt) * 100 ' ' [num2str(classMOST),'/',num2str(classMOST_gt)]]);
+logger(['MO TP Rate ' num2str(classMOST/(classMOST_gt) * 100) ' ' [num2str(classMOST),'/',num2str(classMOST_gt)]]);
 disp('MOST')
 disp(classMOST/(classMOST_gt) * 100)
 disp([num2str(classMOST),'/',num2str(classMOST_gt)])
